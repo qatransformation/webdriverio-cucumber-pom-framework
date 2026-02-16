@@ -64,13 +64,13 @@ test-results/      → Reports, Screenshots & Videos
 
 ## 📚 Documentation
 
-- `README.md` → Getting started and setup
-- `ARCHITECTURE.md` → Detailed architecture
-- `USAGE_GUIDE.md` → Examples and patterns
-- `PIPELINE_CONFIGURATION.md` → CI/CD setup (Jenkins, GitHub Actions, etc.)
-- `PROJECT_SUMMARY.md` → Complete summary
-- `VALIDATION.md` → Validation checklist
-- `Jenkinsfile` → Jenkins pipeline with video recording
+- [README.md](../../README.md) → Getting started and setup
+- [ARCHITECTURE.md](../architecture/ARCHITECTURE.md) → Detailed architecture
+- [USAGE_GUIDE.md](./USAGE_GUIDE.md) → Examples and patterns
+- [PIPELINE_CONFIGURATION.md](../PIPELINE_CONFIGURATION.md) → CI/CD setup (Jenkins, GitHub Actions, etc.)
+- [PROJECT_SUMMARY.md](../architecture/PROJECT_SUMMARY.md) → Complete summary
+- [VALIDATION.md](../architecture/VALIDATION.md) → Validation checklist
+- [Jenkinsfile](../../Jenkinsfile) → Jenkins pipeline with video recording
 
 ## 🔄 CI/CD Quick Start
 
@@ -139,4 +139,4 @@ Feature: My functionality
 - Run in parallel for faster execution
 - Check screenshots in `test-results/screenshots/`
 - Use `Logger.info()` for debugging
-- Refer to `USAGE_GUIDE.md` for common patterns
+- Refer to [USAGE_GUIDE.md](./USAGE_GUIDE.md) for common patterns

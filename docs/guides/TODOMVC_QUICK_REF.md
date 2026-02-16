@@ -64,9 +64,9 @@ Scenario: Add and manage complete tasks
 
 ## 📚 Related Files
 
-- **Feature**: [features/todomvc.feature](../features/todomvc.feature)
-- **Page Object**: [src/pages/TodoPage.ts](../src/pages/TodoPage.ts)
-- **Steps**: [src/steps/todo.steps.ts](../src/steps/todo.steps.ts)
+- **Feature**: [features/todomvc.feature](../../features/todomvc.feature)
+- **Page Object**: [src/pages/TodoPage.ts](../../src/pages/TodoPage.ts)
+- **Steps**: [src/steps/todo.steps.ts](../../src/steps/todo.steps.ts)
 
 ## 🔍 Useful Page Object Methods
 
