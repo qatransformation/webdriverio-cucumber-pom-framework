@@ -1,0 +1,51 @@
+{
+  "name": "webdriverio-cucumber-framework",
+  "author": "QA Transformation to IA - www.qatransformation.ai",
+  "license": "ISC",
+  "version": "1.0.0",
+  "description": "WebdriverIO + Cucumber + Page Object Model - UI Automation Framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "wdio run wdio.conf.ts",
+    "test:open": "npm test; npm run test:report",
+    "test:smoke": "wdio run wdio.conf.ts --cucumberOpts.tagExpression='@smoke'",
+    "test:smoke:open": "npm run test:smoke; npm run test:report",
+    "test:tag": "wdio run wdio.conf.ts --cucumberOpts.tagExpression",
+    "test:tag:open": "npm run test:tag; npm run test:report",
+    "test:headed": "HEADLESS=false wdio run wdio.conf.ts",
+    "test:firefox": "wdio run wdio.conf.ts --capabilities='[{\"browserName\":\"firefox\"}]'",
+    "test:report": "open test-results/index.html",
+    "test:all": "npm run test && npm run report:generate && npm run serve:report",
+    "report:generate": "node generate-report.js",
+    "serve:report": "node report-server.js",
+    "posttest": "npm run report:generate",
+    "clean": "rm -rf test-results/executions && rm -f test-results/index.html",
+    "clean:all": "rm -rf test-results",
+    "clean:interactive": "node scripts/cleanup.js",
+    "pretest": "echo 'Starting tests...'"
+  },
+  "keywords": [
+    "webdriverio",
+    "cucumber",
+    "page-object-model",
+    "automation",
+    "testing"
+  ],
+
+  "type": "commonjs",
+  "devDependencies": {
+    "@cucumber/cucumber": "^12.6.0",
+    "@types/node": "^25.2.3",
+    "@wdio/cli": "^9.24.0",
+    "@wdio/cucumber-framework": "^9.24.0",
+    "@wdio/globals": "^9.23.0",
+    "@wdio/json-reporter": "^9.20.0",
+    "@wdio/local-runner": "^9.24.0",
+    "@wdio/spec-reporter": "^9.24.0",
+    "cucumber-html-reporter": "^7.2.0",
+    "multiple-cucumber-html-reporter": "^3.10.0",
+    "ts-node": "^10.9.2",
+    "wdio-video-reporter": "^6.2.0",
+    "webdriverio": "^9.24.0"
+  }
+}

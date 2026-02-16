@@ -1,0 +1,15 @@
+# Screenshot Placeholder
+
+This is a placeholder image. Please replace with an actual screenshot following the instructions in `docs/screenshots/README.md`.
+
+**Expected screenshot:** Individual execution report showing:
+- Feature name and description
+- List of scenarios with pass/fail status
+- Cucumber steps detail
+- Execution information panel
+
+To generate this screenshot:
+1. Run: `npm run serve:report`
+2. Click on "View Report" for any execution
+3. Capture screenshot showing the report details
+4. Save as `execution-report-detail.png` in this folder

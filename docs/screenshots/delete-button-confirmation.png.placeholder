@@ -1,0 +1,15 @@
+# Screenshot Placeholder
+
+This is a placeholder image. Please replace with an actual screenshot following the instructions in `docs/screenshots/README.md`.
+
+**Expected screenshot:** Delete confirmation dialog showing:
+- Warning message
+- List of items that will be deleted (HTML, videos, screenshots, logs)
+- OK and Cancel buttons
+
+To generate this screenshot:
+1. Run: `npm run serve:report`
+2. Click on any "🗑️ Delete" button
+3. Capture screenshot of the confirmation dialog (DON'T click OK yet!)
+4. Save as `delete-button-confirmation.png` in this folder
+5. Click Cancel to avoid deleting the execution

@@ -1,0 +1,15 @@
+# Screenshot Placeholder
+
+This is a placeholder image. Please replace with an actual screenshot following the instructions in `docs/screenshots/README.md`.
+
+**Expected screenshot:** Video player section expanded showing:
+- Video player with controls
+- The "+View Video" link
+- Video playing or ready to play
+
+To generate this screenshot:
+1. Open any execution report
+2. Find a scenario with video
+3. Click on "+ View Video" link
+4. Capture screenshot showing the expanded video section
+5. Save as `report-video-collapse.png` in this folder

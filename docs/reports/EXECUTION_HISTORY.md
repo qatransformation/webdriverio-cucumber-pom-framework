@@ -1,0 +1,159 @@
+# Execution History System
+
+## 📋 Description
+
+The framework now maintains a complete history of all test executions. Each execution is saved in an independent folder with a timestamp, preserving:
+
+- ✅ HTML Reports
+- 🎥 Execution Videos
+- 📸 Failure Screenshots
+- 📊 Logs in JSON format
+- 📝 Detailed information for each test
+
+## 📁 File Structure
+
+```
+test-results/
+├── index.html                          # Main page with history
+└── executions/
+    ├── 2026-02-16_14-30-45/           # Execution 1
+    │   ├── index.html                  # Report for this execution
+    │   ├── cucumber-report.json        # JSON data
+    │   ├── videos/                     # Test videos
+    │   ├── screenshots/                # Failure screenshots
+    │   └── features/                   # Feature HTML files
+    ├── 2026-02-16_15-45-20/           # Execution 2
+    │   ├── index.html
+    │   ├── cucumber-report.json
+    │   ├── videos/
+    │   ├── screenshots/
+    │   └── features/
+    └── ...
+```
+
+## 🎯 Features
+
+### Main Page (index.html)
+- **Complete listing** of all executions
+- **General statistics**: Total executions, successful, failed
+- **Detailed information** per execution:
+  - Date and time
+  - Features executed
+  - Scenarios (passed/failed/total)
+  - Steps (passed/failed/total)
+  - Total duration
+  - Status (PASSED/FAILED)
+  - Direct link to report
+
+**📸 Main Page Preview:**
+
+![Execution History Main Page](docs/screenshots/execution-history-main.png)
+*Main execution history page showing all test runs with statistics and status*
+
+![Statistics Dashboard](docs/screenshots/report-statistics-dashboard.png)
+*Dashboard with execution statistics: Total, Passed, Failed, and Last Execution*
+
+### Individual Reports
+Each execution has its own report with:
+- Detailed Cucumber steps
+- Videos for each test (separate collapse)
+- Execution logs (separate collapse)
+- Failure screenshots
+- Real duration information
+
+**📸 Individual Report Preview:**
+
+![Execution Report Detail](docs/screenshots/execution-report-detail.png)
+*Detailed view of an individual execution report with Cucumber steps and results*
+
+![Report Video Collapse](docs/screenshots/report-video-collapse.png)
+*Video player section showing recorded test execution*
+
+![Report Logs Collapse](docs/screenshots/report-logs-collapse.png)
+*Execution logs section with browser console, page info, and debug data*
+
+## 🚀 Usage
+
+### Run Tests and Generate History
+
+```bash
+# Run all tests
+npm run test:all
+
+# Run only @smoke tests
+npm run test:smoke
+
+# View complete history
+npm run test:report
+```
+
+### Available Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm test` | Run all tests and generate report |
+| `npm run test:smoke` | Run only tests with @smoke tag |
+| `npm run test:all` | Run tests, generate report and open it |
+| `npm run test:report` | Open execution history |
+| `npm run report:generate` | Generate report from last execution |
+| `npm run clean` | Clean old executions |
+| `npm run clean:all` | Clean entire test-results |
+
+## 🔧 Internal Workflow
+
+### 1. Execution Start
+- A unique timestamp is generated (YYYY-MM-DD_HH-MM-SS)
+- `test-results/executions/[timestamp]/` folder is created
+- Videos and screenshots are saved in this folder
+
+### 2. During Tests
+- Videos are recorded in `[timestamp]/videos/`
+- Screenshots are saved in `[timestamp]/screenshots/`
+- Cucumber JSON is written to `[timestamp]/cucumber-report.json`
+
+### 3. Report Generation
+- HTML report is generated in `[timestamp]/index.html`
+- Videos are processed and injected into HTML
+- Main index is generated with complete history
+
+### 4. Cleanup
+- The temporary `.execution-timestamp` file is deleted automatically
+- Historical reports are maintained until manual cleanup
+
+## 📊 Advantages
+
+✅ **Complete history**: All executions are preserved
+✅ **Traceability**: You can see exactly what happened in each execution
+✅ **Comparison**: Compare results between different executions
+✅ **Evidence**: Videos and screenshots always available
+✅ **No overwrite**: Each execution is independent
+✅ **Organized**: Clear structure by date and time
+
+## 🧹 History Cleanup
+
+### Delete from Web Interface
+Use the delete button on each execution row in the main page.
+
+**📸 Delete Functionality:**
+
+![Delete Button Confirmation](docs/screenshots/delete-button-confirmation.png)
+*Delete button with confirmation dialog for removing specific executions*
+
+### Clean old executions
+```bash
+npm run clean
+```
+This removes all executions but keeps the structure.
+
+### Clean everything
+```bash
+npm run clean:all
+```
+Completely removes the test-results folder.
+
+## 📝 Notes
+
+- The timestamp uses 24-hour format: YYYY-MM-DD_HH-MM-SS
+- Executions are listed from most recent to oldest
+- The main report is automatically updated after each execution
+- Videos are kept in the same folder as the report for direct access

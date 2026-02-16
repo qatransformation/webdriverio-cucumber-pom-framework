@@ -1,0 +1,14 @@
+# Screenshot Placeholder
+
+This is a placeholder image. Please replace with an actual screenshot following the instructions in `docs/screenshots/README.md`.
+
+**Expected screenshot:** Statistics dashboard showing:
+- 4 cards: Total Executions, Passed Executions, Failed Executions, Last Execution
+- Numbers clearly visible
+- Clean, professional look
+
+To generate this screenshot:
+1. Run: `npm run serve:report`
+2. Focus on the statistics section at the top
+3. Capture close-up screenshot of just the 4 statistics cards
+4. Save as `report-statistics-dashboard.png` in this folder

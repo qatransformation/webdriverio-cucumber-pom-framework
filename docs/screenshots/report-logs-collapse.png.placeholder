@@ -1,0 +1,16 @@
+# Screenshot Placeholder
+
+This is a placeholder image. Please replace with an actual screenshot following the instructions in `docs/screenshots/README.md`.
+
+**Expected screenshot:** Execution logs section expanded showing:
+- Browser console logs
+- Page information (URL, title)
+- Error messages (if any)
+- Execution metadata
+
+To generate this screenshot:
+1. Open any execution report
+2. Find a scenario (preferably a failed one for more logs)
+3. Click on "+ Show Info" link
+4. Capture screenshot showing the expanded logs section
+5. Save as `report-logs-collapse.png` in this folder

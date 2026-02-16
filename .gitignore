@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Test Results & Reports
+test-results/
+wdio-screenshots/
+
+# Execution timestamps
+.execution-timestamp
+.execution-timestamp*
+
+# Logs
+*.log
+npm-debug.log*
+allure-results/
+allure-report/
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Backup files
+test-config.backup.js
+*.backup
+*.bak
+
+# Environment variables
+.env
+.env.local
+.env.*.local

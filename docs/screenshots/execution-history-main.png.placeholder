@@ -1,0 +1,15 @@
+# Screenshot Placeholder
+
+This is a placeholder image. Please replace with an actual screenshot following the instructions in `docs/screenshots/README.md`.
+
+**Expected screenshot:** Main execution history page showing:
+- Statistics dashboard with 4 cards (Total, Passed, Failed, Last Execution)
+- Table with execution history
+- Delete buttons for each execution
+- View Report links
+
+To generate this screenshot:
+1. Run: `npm run serve:report`
+2. Wait for browser to open at http://localhost:8080
+3. Capture full page screenshot
+4. Save as `execution-history-main.png` in this folder
