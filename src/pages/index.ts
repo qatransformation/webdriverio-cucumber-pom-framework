@@ -3,3 +3,4 @@
  */
 export { BasePage } from './BasePage';
 export { TodoPage } from './TodoPage';
+export { SauceDemoPage } from './SauceDemoPage';

@@ -17,21 +17,30 @@ Before(async function (this: CustomWorld, { pickle }) {
   // Record start time for duration calculation
   this.startTime = Date.now();
   
-  // Navigate to TodoMVC app before each scenario to ensure clean state
-  await browser.url('https://todomvc.com/examples/typescript-react/');
+  // Determine which page to navigate to based on feature tags
+  const tags = pickle.tags.map(tag => tag.name);
   
-  // Clear localStorage to ensure clean state between tests
-  await browser.execute(() => {
-    localStorage.clear();
-  });
-  
-  // Reload the page after clearing localStorage
-  await browser.refresh();
+  if (tags.some(tag => tag.includes('@saucedemo'))) {
+    // Navigate to SauceDemo login page
+    await browser.url('https://www.saucedemo.com');
+    console.log('🧹 Browser navigated to SauceDemo');
+  } else {
+    // Default: Navigate to TodoMVC app
+    await browser.url('https://todomvc.com/examples/typescript-react/');
+    
+    // Clear localStorage to ensure clean state between tests
+    await browser.execute(() => {
+      localStorage.clear();
+    });
+    
+    // Reload the page after clearing localStorage
+    await browser.refresh();
+    
+    console.log('🧹 Browser navigated to TodoMVC with clean state');
+  }
   
   // Wait for the page to be fully loaded
   await browser.pause(500);
-  
-  console.log('🧹 Browser navigated to clean state with cleared localStorage');
 });
 
 After(async function (this: CustomWorld, { pickle, result }) {

@@ -34,18 +34,32 @@ console.log(`📹 Found ${videos.length} video(s) to embed`);
 
 // Create a mapping of scenarios to videos
 const scenarioVideos = [];
+const usedVideos = new Set(); // Track which videos have been matched
+
 jsonData.forEach(feature => {
   feature.elements.forEach(scenario => {
+    // Normalize scenario name for matching
     const scenarioName = scenario.name.replace(/[^a-zA-Z0-9]/g, '-');
-    const matchingVideo = videos.find(v => v.includes(scenarioName));
     
-    if (matchingVideo) {
+    // Find ALL videos that match this scenario name
+    // For Scenario Outlines, multiple videos will have the same base name with different indices
+    const matchingVideos = videos.filter(v => {
+      // Check if video name starts with the scenario name
+      // and hasn't been used yet
+      const videoBaseName = v.split('-0-')[0]; // Get base name before example index
+      const scenarioBaseName = scenarioName.split('-').slice(0, -1).join('-') || scenarioName;
+      return v.includes(scenarioName) && !usedVideos.has(v);
+    });
+    
+    // Add all matching videos for this scenario
+    matchingVideos.forEach(matchingVideo => {
       scenarioVideos.push({
         name: scenario.name,
         video: matchingVideo,
         id: scenario.id
       });
-    }
+      usedVideos.add(matchingVideo);
+    });
   });
 });
 

@@ -1,5 +1,5 @@
 import { IWorldOptions, World, setWorldConstructor } from '@wdio/cucumber-framework';
-import { TodoPage } from '../pages';
+import { TodoPage, SauceDemoPage } from '../pages';
 
 /**
  * CustomWorld - Shared context between all Cucumber steps
@@ -8,6 +8,7 @@ import { TodoPage } from '../pages';
 export class CustomWorld extends World {
   // Page Objects
   todoPage: TodoPage;
+  sauceDemoPage: SauceDemoPage;
   
   // Test execution tracking
   startTime?: number;
@@ -17,6 +18,7 @@ export class CustomWorld extends World {
     
     // Initialize Page Objects
     this.todoPage = new TodoPage();
+    this.sauceDemoPage = new SauceDemoPage();
   }
 }
 

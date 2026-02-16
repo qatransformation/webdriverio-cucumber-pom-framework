@@ -30,6 +30,53 @@
       "expectedError": "Password es requerido"
     }
   ],
+  "saucedemoUsers": {
+    "valid": [
+      {
+        "username": "standard_user",
+        "password": "secret_sauce",
+        "description": "Standard user with full access"
+      },
+      {
+        "username": "problem_user",
+        "password": "secret_sauce",
+        "description": "User with product image issues"
+      },
+      {
+        "username": "performance_glitch_user",
+        "password": "secret_sauce",
+        "description": "User with performance issues"
+      },
+      {
+        "username": "error_user",
+        "password": "secret_sauce",
+        "description": "User with error scenarios"
+      },
+      {
+        "username": "visual_user",
+        "password": "secret_sauce",
+        "description": "User with visual testing scenarios"
+      }
+    ],
+    "invalid": [
+      {
+        "username": "locked_out_user",
+        "password": "secret_sauce",
+        "description": "User that has been locked out",
+        "expectedError": "Epic sadface: Sorry, this user has been locked out."
+      },
+      {
+        "username": "invalid_user",
+        "password": "secret_sauce",
+        "expectedError": "Epic sadface: Username and password do not match any user in this service"
+      },
+      {
+        "username": "standard_user",
+        "password": "wrong_password",
+        "expectedError": "Epic sadface: Username and password do not match any user in this service"
+      }
+    ]
+  },
   "testData": {
     "searchQueries": {
       "valid": ["webdriverio", "automation", "testing"],
@@ -38,7 +85,8 @@
     "urls": {
       "production": "https://todomvc.com/examples/typescript-react/",
       "staging": "https://staging.example.com",
-      "local": "http://localhost:3000"
+      "local": "http://localhost:3000",
+      "saucedemo": "https://www.saucedemo.com"
     }
   }
 }
