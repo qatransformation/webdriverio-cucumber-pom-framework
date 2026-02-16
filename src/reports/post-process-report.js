@@ -235,6 +235,120 @@ featureFiles.forEach(featureFile => {
   fs.writeFileSync(featurePath, featureHtml);
 });
 
+// Enhance Scenario Outline titles with parameter values
+console.log('🔧 Enhancing Scenario Outline titles with parameters...');
+
+featureFiles.forEach(featureFile => {
+  const featurePath = path.join(featuresDir, featureFile);
+  let featureHtml = fs.readFileSync(featurePath, 'utf8');
+  
+  // Find the corresponding feature in JSON
+  const featureData = jsonData.find(f => {
+    const featureFileName = f.uri.split('/').pop().replace('.feature', '');
+    return featureFile.includes(featureFileName);
+  });
+  
+  if (!featureData) return;
+  
+  // Process each scenario
+  featureData.elements.forEach(scenario => {
+    // Extract parameters from step names (they contain the actual values)
+    const parameters = {};
+    scenario.steps.forEach(step => {
+      // Skip if step name is missing (e.g., hooks)
+      if (!step || !step.name) return;
+      
+      // Extract values in quotes from step names
+      const matches = step.name.match(/"([^"]*)"/g);
+      if (matches) {
+        matches.forEach(match => {
+          const value = match.replace(/"/g, '');
+          // Try to identify the parameter name from the step text
+          if (step.name.includes('username')) {
+            parameters.username = value;
+          } else if (step.name.includes('password')) {
+            parameters.password = value;
+          } else if (step.name.includes('task')) {
+            if (!parameters.tasks) parameters.tasks = [];
+            parameters.tasks.push(value);
+          }
+        });
+      }
+    });
+    
+    // If we have parameters, update the scenario title
+    if (Object.keys(parameters).length > 0) {
+      // Create parameter string
+      let paramString = ' | ';
+      const paramParts = [];
+      
+      for (const [key, value] of Object.entries(parameters)) {
+        if (Array.isArray(value)) {
+          paramParts.push(`${key}: ${value.join(', ')}`);
+        } else {
+          paramParts.push(`${key}: ${value}`);
+        }
+      }
+      paramString += paramParts.join('; ');
+      
+      // Find the scenario heading in HTML
+      // Pattern: <h2>Scenario Outline: <small>Name</small></h2> or <h2>Scenario: <small>Name</small></h2>
+      const scenarioNameEscaped = scenario.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      
+      // Try multiple patterns to match different HTML structures
+      const patterns = [
+        // Pattern for Scenario Outline: <h2>Scenario Outline: <small>Name</small></h2>
+        new RegExp(
+          `(<h2>Scenario Outline:\\s*<small>)(${scenarioNameEscaped})(</small></h2>)`,
+          'g'
+        ),
+        // Pattern for Scenario: <h2>Scenario: <small>Name</small></h2>
+        new RegExp(
+          `(<h2>Scenario:\\s*<small>)(${scenarioNameEscaped})(</small></h2>)`,
+          'g'
+        ),
+        // Pattern for plain scenario heading: <h3 class="scenario-heading">Name</h3>
+        new RegExp(
+          `(<h3[^>]*class="[^"]*scenario-heading[^"]*"[^>]*>\\s*${scenarioNameEscaped})(</h3>)`,
+          'g'
+        )
+      ];
+      
+      // Try each pattern
+      let replaced = false;
+      for (const headingPattern of patterns) {
+        const matches = featureHtml.match(headingPattern);
+        if (matches) {
+          // Replace the heading to include parameters
+          featureHtml = featureHtml.replace(headingPattern, (match, ...args) => {
+            // Check if parameters already added
+            if (match.includes(' | ')) return match;
+            scenariosEnhanced++;
+            replaced = true;
+            
+            // For <h2> patterns, args are: [before, name, after]
+            // For <h3> patterns, args are: [before, after]
+            if (args.length === 3) {
+              return `${args[0]}${args[1]}<span style="color: #6c757d; font-size: 0.85em; font-weight: normal;">${paramString}</span>${args[2]}`;
+            } else {
+              return `${args[0]}<span style="color: #6c757d; font-size: 0.9em;">${paramString}</span>${args[1]}`;
+            }
+          });
+          
+          if (replaced) {
+            console.log(`  ✅ Enhanced: ${scenario.name}${paramString}`);
+            break;
+          }
+        }
+      }
+    }
+  });
+  
+  fs.writeFileSync(featurePath, featureHtml);
+});
+
+console.log('✅ Scenario titles enhanced with parameters');
+
 console.log(`📹 Total videos injected in feature files: ${videosInjected}`);
 
 // Add feature file path and scenario names to Features overview table
