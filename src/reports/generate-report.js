@@ -8,16 +8,18 @@ const { getExecutionDir, getExecutionTimestamp } = require('./execution-timestam
 const executionDir = getExecutionDir();
 const executionTimestamp = getExecutionTimestamp();
 
-// Helper function to get human-readable OS name
+// Helper function to get OS name compatible with multiple-cucumber-html-reporter
+// The library recognizes: 'osx', 'ios', 'windows', 'win*', 'linux', 'ubuntu', 'android'
+// Any other value will show a question mark icon
 function getOSName() {
   const platform = process.platform;
   const osMap = {
-    'darwin': 'macOS',
-    'win32': 'Windows',
-    'linux': 'Linux',
-    'freebsd': 'FreeBSD',
-    'openbsd': 'OpenBSD',
-    'sunos': 'SunOS'
+    'darwin': 'osx',        // macOS/OSX - shows Apple icon
+    'win32': 'windows',     // Windows - shows Windows icon
+    'linux': 'linux',       // Linux - shows Linux icon
+    'freebsd': 'linux',     // FreeBSD - shows Linux icon (close enough)
+    'openbsd': 'linux',     // OpenBSD - shows Linux icon (close enough)
+    'sunos': 'linux'        // SunOS - shows Linux icon (close enough)
   };
   return osMap[platform] || platform;
 }
