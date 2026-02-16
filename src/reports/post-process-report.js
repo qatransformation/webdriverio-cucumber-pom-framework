@@ -110,6 +110,76 @@ span.keyword.highlight::before {
   font-size: 13px;
   content: attr(data-label);
 }
+/* Estilos para tags como lista desordenada */
+.tags {
+  display: inline-block;
+}
+.tags ul.tag-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.tags ul.tag-list li {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #007bff;
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0;
+}
+.tags ul.tag-list li::before {
+  content: none !important;
+}
+body.darkmode .tags ul.tag-list li {
+  background: #0056b3;
+}
+</style>
+<script>
+// Convert tags to unordered list
+document.addEventListener('DOMContentLoaded', function() {
+  const tagContainers = document.querySelectorAll('.tags');
+  
+  tagContainers.forEach(container => {
+    // Find all tag spans
+    const tagSpans = container.querySelectorAll('span.tag');
+    
+    if (tagSpans.length > 0) {
+      // Create unordered list
+      const ul = document.createElement('ul');
+      ul.className = 'tag-list';
+      
+      // Convert each span to list item
+      tagSpans.forEach(span => {
+        const li = document.createElement('li');
+        li.textContent = span.textContent.trim();
+        ul.appendChild(li);
+      });
+      
+      // Find the icon (if exists) and keep it
+      const icon = container.querySelector('i.fa-tags');
+      
+      // Clear container and rebuild
+      container.innerHTML = '';
+      
+      if (icon) {
+        container.appendChild(icon);
+        container.appendChild(document.createTextNode(' '));
+      }
+      
+      container.appendChild(ul);
+    }
+  });
+});
+</script>
+`;
+  content: attr(data-label);
+}
 </style>
 `;
 
@@ -446,6 +516,88 @@ rowsToRemove.forEach(row => {
 
 fs.writeFileSync(reportPath, htmlContent);
 console.log(`✅ Removed ${rowsToRemove.length} duplicate feature(s) from table`);
+
+// Inject CSS and JavaScript for tags in index.html
+console.log('🔧 Adding tag list styling to index.html...');
+htmlContent = fs.readFileSync(reportPath, 'utf8');
+
+// CSS and JS for tags (without video styles)
+const tagsCustomization = `
+<style>
+/* Estilos para tags como lista desordenada */
+.tags {
+  display: inline-block;
+}
+.tags ul.tag-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.tags ul.tag-list li {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #007bff;
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0;
+}
+.tags ul.tag-list li::before {
+  content: none !important;
+}
+body.darkmode .tags ul.tag-list li {
+  background: #0056b3;
+}
+</style>
+<script>
+// Convert tags to unordered list
+document.addEventListener('DOMContentLoaded', function() {
+  const tagContainers = document.querySelectorAll('.tags');
+  
+  tagContainers.forEach(container => {
+    // Find all tag spans
+    const tagSpans = container.querySelectorAll('span.tag');
+    
+    if (tagSpans.length > 0) {
+      // Create unordered list
+      const ul = document.createElement('ul');
+      ul.className = 'tag-list';
+      
+      // Convert each span to list item
+      tagSpans.forEach(span => {
+        const li = document.createElement('li');
+        li.textContent = span.textContent.trim();
+        ul.appendChild(li);
+      });
+      
+      // Find the icon (if exists) and keep it
+      const icon = container.querySelector('i.fa-tags');
+      
+      // Clear container and rebuild
+      container.innerHTML = '';
+      
+      if (icon) {
+        container.appendChild(icon);
+        container.appendChild(document.createTextNode(' '));
+      }
+      
+      container.appendChild(ul);
+    }
+  });
+});
+</script>
+`;
+
+if (!htmlContent.includes('tag-list')) {
+  htmlContent = htmlContent.replace('</head>', tagsCustomization + '</head>');
+  fs.writeFileSync(reportPath, htmlContent);
+  console.log('✅ Tag list styling added to index.html');
+}
 
 console.log('✅ Report post-processed successfully!');
 console.log('📊 Report location: test-results/index.html');
