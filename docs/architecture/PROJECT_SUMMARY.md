@@ -14,26 +14,36 @@ A complete UI test automation architecture has been created implementing:
 webdriverio_cucumber_pom/
 │
 ├── 📂 features/                         # Feature files (Gherkin/BDD)
-│   └── todomvc.feature                  # Test scenarios
+│   ├── todomvc.feature                  # TodoMVC task management tests
+│   └── saucedemo.feature                # SauceDemo login tests
 │
 ├── 📂 src/
 │   ├── 📂 pages/                        # Page Objects (POM)
 │   │   ├── BasePage.ts                  # Base class with common methods
-│   │   ├── TodoPage.ts                  # Page Object
+│   │   ├── TodoPage.ts                  # TodoMVC Page Object
+│   │   ├── SauceDemoPage.ts             # SauceDemo Page Object
 │   │   └── index.ts                     # Exports
 │   │
 │   ├── 📂 steps/                        # Step Definitions
-│   │   ├── todo.steps.ts                # Test steps
+│   │   ├── todo.steps.ts                # TodoMVC test steps
+│   │   ├── saucedemo.steps.ts           # SauceDemo test steps
 │   │   └── common.steps.ts              # Reusable steps
 │   │
 │   ├── 📂 support/                      # Configuration and support
 │   │   ├── world.ts                     # Custom World (context)
 │   │   └── hooks.ts                     # Hooks (Before/After)
 │   │
-│   └── 📂 utils/                        # Utilities
-│       ├── constants.ts                 # Global constants
-│       ├── helpers.ts                   # Helper functions
-│       └── logger.ts                    # Logging system
+│   ├── 📂 utils/                        # Utilities
+│   │   ├── constants.ts                 # Global constants
+│   │   ├── helpers.ts                   # Helper functions
+│   │   └── logger.ts                    # Logging system
+│   │
+│   └── 📂 reports/                      # Report generation scripts
+│       ├── generate-report.js           # Report generator
+│       ├── generate-index.js            # Index generator
+│       ├── report-server.js             # Report HTTP server
+│       ├── post-process-report.js       # Post-process reports (videos, tags)
+│       └── execution-timestamp.js       # Timestamp utilities
 │
 ├── 📂 test-data/                        # Test data
 │   ├── users.json                       # Test users
@@ -43,16 +53,17 @@ webdriverio_cucumber_pom/
 │   ├── index.html                       # Main execution history
 │   └── executions/                      # Individual execution folders
 │       └── <timestamp>/                 # Each execution with timestamp
-│           ├── cucumber-report.html     # HTML report with videos
+│           ├── index.html               # HTML report with videos
+│           ├── cucumber-report.json     # Cucumber JSON report
 │           ├── videos/                  # Recorded videos
 │           └── screenshots/             # Screenshots
 │
 ├── 📂 scripts/                          # Utility scripts
-│   ├── cleanup.js                       # Interactive cleanup menu
-│   └── show-structure.sh                # Display project structure
+│   └── cleanup.js                       # Interactive cleanup menu
 │
 ├── 📂 docs/                             # 📚 Complete Documentation
 │   ├── README.md                        # Documentation index
+│   ├── show-structure.sh                # Display project structure
 │   │
 │   ├── 📂 architecture/                 # Architecture documentation
 │   │   ├── ARCHITECTURE.md              # Detailed architecture
@@ -63,7 +74,8 @@ webdriverio_cucumber_pom/
 │   ├── 📂 guides/                       # User guides
 │   │   ├── USAGE_GUIDE.md               # Complete usage guide
 │   │   ├── QUICK_REFERENCE.md           # Quick reference
-│   │   ├── QUICK_REFERENCE.md           # Quick reference guide
+│   │   ├── SAUCEDEMO_FEATURE.md         # SauceDemo feature documentation
+│   │   ├── TODOMVC_QUICK_REF.md         # TodoMVC quick reference
 │   │   └── ENVIRONMENT_SETUP_SUMMARY.md # Environment setup
 │   │
 │   ├── 📂 reports/                      # Report documentation
@@ -75,16 +87,9 @@ webdriverio_cucumber_pom/
 │   │
 │   └── PIPELINE_CONFIGURATION.md        # CI/CD setup and Jenkins
 │
-├── 📄 wdio.conf.ts                      # WebdriverIO configuration
+├── 📄 wdio.conf.ts                      # WebdriverIO configuration (multi-browser)
 ├── 📄 tsconfig.json                     # TypeScript configuration
 ├── 📄 package.json                      # Dependencies and scripts
-├── � src/
-│   ├── 📂 reports/                      # Report generation scripts
-│   │   ├── generate-report.js           # Report generator
-│   │   ├── generate-index.js            # Index generator
-│   │   ├── report-server.js             # Report HTTP server
-│   │   ├── post-process-report.js       # Post-process reports
-│   │   └── execution-timestamp.js       # Timestamp utilities
 ├── 📄 Jenkinsfile                       # Jenkins pipeline configuration
 ├── 📄 .gitignore                        # Files ignored by Git
 ├── 📄 LICENSE                           # ISC License
@@ -132,10 +137,11 @@ npm run test:report
 - **Test Data Generator**: Random data generation
 
 ### ✅ Reports and Debugging
-- **HTML Report**: Interactive visual report
+- **HTML Report**: Interactive visual report with embedded videos
 - **JSON Report**: For integration with other systems
-- **Automatic screenshots**: On failures
-- **Videos** (optional): Execution recording
+- **Automatic screenshots**: On all tests
+- **Video Recording**: Automatic video capture for all scenarios
+- **Execution History**: Track all test runs with timestamps
 
 ## 📝 Available Commands
 
@@ -143,10 +149,14 @@ npm run test:report
 |---------|-------------|
 | `npm test` | Run all tests |
 | `npm run test:smoke` | Run only tests with @smoke |
-| `npm run test:parallel` | Run tests in parallel |
+| `npm run test:open` | Run tests and open report |
 | `npm run test:headed` | Run with visible browser |
+| `npm run test:firefox` | Run tests in Firefox |
+| `BROWSER=safari npm test` | Run tests in Safari |
+| `BROWSER=chrome,firefox npm test` | Run tests in multiple browsers |
 | `npm run test:report` | View HTML report |
 | `npm run clean` | Clean previous results |
+| `npm run clean:interactive` | Interactive cleanup menu |
 
 ## 🏗️ Layered Architecture
 
@@ -235,6 +245,14 @@ export class CustomWorld extends World {
 | WebdriverIO | ^9.24.0 | Browser automation |
 | Cucumber | ^12.6.0 | BDD Framework |
 | TypeScript | ^5.3.3 | Programming language |
+| wdio-video-reporter | ^6.2.0 | Video recording |
+| multiple-cucumber-html-reporter | ^3.8.0 | HTML reports |
+
+### Supported Browsers
+- Chrome (default)
+- Firefox
+- Safari (macOS)
+
 ## ✨ Advantages of This Architecture
 
 ### Maintainability

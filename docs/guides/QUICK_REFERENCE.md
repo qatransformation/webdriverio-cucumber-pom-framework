@@ -32,7 +32,7 @@ npm run clean
 npx wdio run wdio.conf.ts --cucumberOpts.tagExpression='@smoke'
 
 # View project structure
-./show-structure.sh
+./docs/show-structure.sh
 
 # Validate TypeScript
 npx tsc --noEmit

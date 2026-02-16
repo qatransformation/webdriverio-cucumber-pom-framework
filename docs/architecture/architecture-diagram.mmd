@@ -1,18 +1,18 @@
 graph TB
     subgraph "Layer 1: Business Specification"
-        F[Features/Gherkin<br/>homepage.feature<br/>login.feature]
+        F[Features/Gherkin<br/>todomvc.feature<br/>saucedemo.feature]
     end
     
     subgraph "Layer 2: Test Implementation"
-        S[Step Definitions<br/>navigation.steps.ts<br/>common.steps.ts]
+        S[Step Definitions<br/>todo.steps.ts<br/>saucedemo.steps.ts<br/>common.steps.ts]
         W[Custom World<br/>Browser Context<br/>Page Objects Registry]
-        H[Hooks<br/>Before/After<br/>Screenshots]
+        H[Hooks<br/>Before/After<br/>Screenshots/Videos]
     end
     
     subgraph "Layer 3: Page Objects"
         BP[BasePage<br/>Common Methods]
-        HP[HomePage]
-        LP[LoginPage]
+        TP[TodoPage]
+        SP[SauceDemoPage]
         OP[Other Pages...]
     end
     
@@ -23,35 +23,35 @@ graph TB
     end
     
     subgraph "Layer 5: Browser Automation"
-        WDIO[WebdriverIO API<br/>Browser Control]
+        WDIO[WebdriverIO API<br/>Chrome, Firefox, Safari]
     end
     
     F -->|executes| S
     S -->|uses| W
-    S -->|interacts via| HP
-    S -->|interacts via| LP
+    S -->|interacts via| TP
+    S -->|interacts via| SP
     S -->|interacts via| OP
-    W -->|initializes| HP
-    W -->|initializes| LP
+    W -->|initializes| TP
+    W -->|initializes| SP
     W -->|initializes| OP
     H -->|lifecycle| W
-    HP -->|extends| BP
-    LP -->|extends| BP
+    TP -->|extends| BP
+    SP -->|extends| BP
     OP -->|extends| BP
     BP -->|uses| U1
     BP -->|uses| U2
     S -->|uses| U3
-    BP -->|calls| PW
+    BP -->|calls| WDIO
     
     style F fill:#e1f5fe
     style S fill:#fff3e0
     style W fill:#fff3e0
     style H fill:#fff3e0
     style BP fill:#f3e5f5
-    style HP fill:#f3e5f5
-    style LP fill:#f3e5f5
+    style TP fill:#f3e5f5
+    style SP fill:#f3e5f5
     style OP fill:#f3e5f5
     style U1 fill:#e8f5e9
     style U2 fill:#e8f5e9
     style U3 fill:#e8f5e9
-    style PW fill:#fce4ec
+    style WDIO fill:#fce4ec

@@ -9,6 +9,8 @@ The framework now maintains a complete history of all test executions. Each exec
 - 📸 Failure Screenshots
 - 📊 Logs in JSON format
 - 📝 Detailed information for each test
+- 🌐 Browser metadata (name and version)
+- 🏷️ Feature tags display
 
 ## 📁 File Structure
 
@@ -60,6 +62,8 @@ Each execution has its own report with:
 - Execution logs (separate collapse)
 - Failure screenshots
 - Real duration information
+- **Browser version** (e.g., Chrome 145.0.7632.76, Firefox 147.0.4)
+- **Tags** displayed in scenario headers
 
 **📸 Individual Report Preview:**
 
@@ -77,11 +81,21 @@ Each execution has its own report with:
 ### Run Tests and Generate History
 
 ```bash
-# Run all tests
+# Run all tests (default: Chrome)
 npm run test:all
 
 # Run only @smoke tests
 npm run test:smoke
+
+# Run in specific browser
+BROWSER=firefox npm test
+BROWSER=safari npm test
+
+# Run in multiple browsers
+BROWSER=chrome,firefox npm test
+
+# Run with specific tags
+npm run test:tags -- --cucumberOpts.tagExpression="@locked"
 
 # View complete history
 npm run test:report
@@ -93,11 +107,21 @@ npm run test:report
 |--------|-------------|
 | `npm test` | Run all tests and generate report |
 | `npm run test:smoke` | Run only tests with @smoke tag |
+| `npm run test:tags` | Run tests with specific tag expression |
 | `npm run test:all` | Run tests, generate report and open it |
 | `npm run test:report` | Open execution history |
 | `npm run report:generate` | Generate report from last execution |
 | `npm run clean` | Clean old executions |
 | `npm run clean:all` | Clean entire test-results |
+
+### Multi-Browser Execution
+
+| Browser | Command |
+|---------|--------|
+| Chrome (default) | `npm test` |
+| Firefox | `BROWSER=firefox npm test` |
+| Safari (macOS) | `BROWSER=safari npm test` |
+| Multiple | `BROWSER=chrome,firefox npm test` |
 
 ## 🔧 Internal Workflow
 
@@ -109,15 +133,24 @@ npm run test:report
 ### 2. During Tests
 - Videos are recorded in `[timestamp]/videos/`
 - Screenshots are saved in `[timestamp]/screenshots/`
-- Cucumber JSON is written to `[timestamp]/cucumber-report.json`
+- **Per-worker JSON files**: Each spec writes `cucumber-report-{specName}.json`
+- Browser metadata saved to `.browser-metadata`
 
-### 3. Report Generation
+### 3. JSON Merge (onComplete)
+- All per-worker JSON files are merged into `cucumber-report.json`
+- Ensures all features appear in reports (fixes multi-worker overwrite)
+
+### 4. Report Generation
 - HTML report is generated in `[timestamp]/index.html`
-- Videos are processed and injected into HTML
+- Videos are processed and injected per scenario/example
+- Tags are displayed in scenario headers
+- Browser version is shown (e.g., "Chrome 145.0.7632.76")
 - Main index is generated with complete history
 
-### 4. Cleanup
+### 5. Cleanup
 - The temporary `.execution-timestamp` file is deleted automatically
+- Per-worker JSON files are cleaned after merge
+- `.browser-metadata` is used then cleaned
 - Historical reports are maintained until manual cleanup
 
 ## 📊 Advantages
@@ -128,6 +161,9 @@ npm run test:report
 ✅ **Evidence**: Videos and screenshots always available
 ✅ **No overwrite**: Each execution is independent
 ✅ **Organized**: Clear structure by date and time
+✅ **Multi-browser**: Support for Chrome, Firefox, Safari
+✅ **Accurate metadata**: Real browser name and version displayed
+✅ **Multi-worker safe**: Per-spec JSON prevents data loss
 
 ## 🧹 History Cleanup
 

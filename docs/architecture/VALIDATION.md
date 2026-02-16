@@ -39,7 +39,7 @@ ls -la features/
 ### 5. Verify Structure
 
 ```bash
-./show-structure.sh
+./docs/show-structure.sh
 ```
 
 **Expected**: See complete project summary

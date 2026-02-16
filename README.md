@@ -221,7 +221,13 @@ This project is licensed under the ISC License - see the [LICENSE](LICENSE) file
 - [Cucumber Documentation](https://cucumber.io/docs/cucumber/)
 - [Page Object Model Pattern](https://webdriver.io/docs/pageobjects/)
 
-## 📋 Changelog
+## � Documentation
+
+- [Architecture](docs/architecture/ARCHITECTURE.md) - Framework architecture and design patterns
+- [SauceDemo Feature Guide](docs/guides/SAUCEDEMO_FEATURE.md) - SauceDemo login tests documentation
+- [Pipeline Configuration](docs/PIPELINE_CONFIGURATION.md) - CI/CD setup guide
+
+## �📋 Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for version history and changes.
 

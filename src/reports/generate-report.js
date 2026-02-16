@@ -194,6 +194,30 @@ const formattedDate = new Date().toLocaleString('en-US', {
   hour12: false
 });
 
+// Read browser metadata if available (stored outside executionDir to avoid conflict with reporter)
+let browserName = 'Chrome';
+let browserVersion = 'unknown';
+const browserMetadataPath = path.join(executionDir, '.browser-metadata');
+// Also check old location for backwards compatibility
+const oldMetadataPath = path.join(executionDir, 'browser-metadata.json');
+
+if (fs.existsSync(oldMetadataPath)) {
+  // Migrate old file to new location
+  fs.renameSync(oldMetadataPath, browserMetadataPath);
+}
+
+if (fs.existsSync(browserMetadataPath)) {
+  try {
+    const browserMetadata = JSON.parse(fs.readFileSync(browserMetadataPath, 'utf8'));
+    browserName = browserMetadata.browserName || 'Chrome';
+    browserVersion = browserMetadata.browserVersion || 'unknown';
+    // Capitalize first letter
+    browserName = browserName.charAt(0).toUpperCase() + browserName.slice(1);
+  } catch (err) {
+    console.log('⚠️  Could not read browser metadata, using defaults');
+  }
+}
+
 report.generate({
   jsonDir: executionDir,
   reportPath: executionDir,
@@ -207,8 +231,8 @@ report.generate({
   pageFooter: '<div><p>Test Execution Report - Automation Framework | Videos Embedded</p></div>',
   metadata: {
     browser: {
-      name: 'chrome',
-      version: 'latest'
+      name: browserName,
+      version: browserVersion
     },
     device: 'Desktop',
     platform: {

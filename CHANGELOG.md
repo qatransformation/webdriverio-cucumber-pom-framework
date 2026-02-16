@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-02-16
+
+### Added
+- **Multi-browser execution support** via BROWSER environment variable
+  - Chrome (default), Firefox, Safari (macOS)
+  - Run in multiple browsers: `BROWSER=chrome,firefox npm test`
+  - Example: `BROWSER=safari npm test`
+- **Browser metadata in reports** - displays actual browser name and version
+  - Shows "Chrome 145.0.7632.76" instead of "latest"
+  - Browser metadata saved to `.browser-metadata` file
+- **Per-worker JSON generation** for multi-spec parallel execution
+  - Each spec writes `cucumber-report-{specName}.json`
+  - `onComplete` hook merges all JSON files
+  - Fixes data loss when running multiple features in parallel
+- **Feature tags display** in scenario headers
+  - Tags visible in HTML report scenario titles
+- **SauceDemo feature** with login tests
+  - `features/saucedemo.feature` with @locked user scenario
+  - `src/pages/SauceDemoPage.ts` Page Object
+  - `src/steps/saucedemo.steps.ts` step definitions
+
+### Changed
+- **Documentation reorganization**
+  - Moved `SAUCEDEMO_FEATURE.md` to `docs/guides/`
+  - Moved `show-structure.sh` to `docs/`
+  - Updated all references in README, architecture docs
+- **PROJECT_SUMMARY.md** updated with current architecture
+- **EXECUTION_HISTORY.md** updated with multi-browser workflow
+- **Capabilities** now dynamically generated from BROWSER env var
+
+### Fixed
+- **Multi-worker JSON overwrite** - all features now appear in reports
+- **Browser version display** - uses `browser.capabilities.browserVersion`
+- **Scenario Outline formatting** - proper example parameter display
+
+---
+
 ## [1.1.0] - 2026-02-16
 
 ### Added

@@ -36,30 +36,59 @@ console.log(`📹 Found ${videos.length} video(s) to embed`);
 const scenarioVideos = [];
 const usedVideos = new Set(); // Track which videos have been matched
 
+// Group videos by their base scenario name (before the timestamp part)
+// E.g., "Login-with-different-user-credentials-0-0--CHROME--..." -> "Login-with-different-user-credentials"
+const videosByScenarioName = {};
+videos.forEach(v => {
+  // Extract scenario name: everything before the "-0-0--" or "-0-1--" pattern (worker-instance ids)
+  const match = v.match(/^(.+?)-\d+-\d+--/);
+  if (match) {
+    const baseName = match[1];
+    if (!videosByScenarioName[baseName]) {
+      videosByScenarioName[baseName] = [];
+    }
+    videosByScenarioName[baseName].push(v);
+  }
+});
+
+// Sort each group chronologically by timestamp in filename
+for (const key of Object.keys(videosByScenarioName)) {
+  videosByScenarioName[key].sort();
+}
+
+// Track which video index to use next for each scenario name
+const videoIndexMap = {};
+
 jsonData.forEach(feature => {
-  feature.elements.forEach(scenario => {
+  feature.elements.forEach((scenario, elementIdx) => {
     // Normalize scenario name for matching
     const scenarioName = scenario.name.replace(/[^a-zA-Z0-9]/g, '-');
     
-    // Find ALL videos that match this scenario name
-    // For Scenario Outlines, multiple videos will have the same base name with different indices
-    const matchingVideos = videos.filter(v => {
-      // Check if video name starts with the scenario name
-      // and hasn't been used yet
-      const videoBaseName = v.split('-0-')[0]; // Get base name before example index
-      const scenarioBaseName = scenarioName.split('-').slice(0, -1).join('-') || scenarioName;
-      return v.includes(scenarioName) && !usedVideos.has(v);
-    });
+    // Find the video group that matches this scenario
+    const matchingGroup = Object.keys(videosByScenarioName).find(baseName => 
+      scenarioName === baseName || scenarioName.startsWith(baseName)
+    );
     
-    // Add all matching videos for this scenario
-    matchingVideos.forEach(matchingVideo => {
+    if (!matchingGroup) return;
+    
+    // Get the next available video for this scenario name group
+    if (!videoIndexMap[matchingGroup]) {
+      videoIndexMap[matchingGroup] = 0;
+    }
+    
+    const videoIdx = videoIndexMap[matchingGroup];
+    const groupVideos = videosByScenarioName[matchingGroup];
+    
+    if (videoIdx < groupVideos.length) {
       scenarioVideos.push({
         name: scenario.name,
-        video: matchingVideo,
-        id: scenario.id
+        video: groupVideos[videoIdx],
+        id: scenario.id,
+        occurrenceIndex: videoIdx // Track which occurrence this is
       });
-      usedVideos.add(matchingVideo);
-    });
+      usedVideos.add(groupVideos[videoIdx]);
+      videoIndexMap[matchingGroup]++;
+    }
   });
 });
 
@@ -133,20 +162,55 @@ featureFiles.forEach(featureFile => {
     featureHtml = featureHtml.replace('</head>', customCSS + '</head>');
   }
   
+  // Remove existing video collapses and links from previous runs
+  featureHtml = featureHtml.replace(/<div id="[^"]*-video" class="scenario-step-collapse collapse">[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/g, '');
+  featureHtml = featureHtml.replace(/\s*<a href="#[^"]*-video"[^>]*>\+ View Video<\/a>/g, '');
+  
+  // Track which occurrence of each scenario name we've processed
+  const scenarioOccurrenceMap = {};
+  
   // Insert videos for each scenario in this feature
   scenarioVideos.forEach(sv => {
-    // Only inject if not already present
-    if (featureHtml.includes(sv.video)) {
+    // Check if this scenario name exists in this feature file
+    if (!featureHtml.includes(sv.name)) {
       return;
     }
     
-    // Look for the scenario name and find the collapse div that contains logs
-    const scenarioNameIndex = featureHtml.indexOf(sv.name);
+    // Track occurrence for this scenario name
+    if (!scenarioOccurrenceMap[sv.name]) {
+      scenarioOccurrenceMap[sv.name] = 0;
+    }
+    const targetOccurrence = scenarioOccurrenceMap[sv.name];
+    scenarioOccurrenceMap[sv.name]++;
+    
+    // Find the N-th occurrence of this scenario name in the HTML
+    // Look for it within a heading context (h2 tag)
+    const headingPattern = sv.name;
+    let currentOccurrence = 0;
+    let searchPos = 0;
+    let scenarioNameIndex = -1;
+    
+    while (searchPos < featureHtml.length) {
+      const idx = featureHtml.indexOf(headingPattern, searchPos);
+      if (idx === -1) break;
+      
+      // Verify this is in a heading context (within ~200 chars before should have <h2>)
+      const contextBefore = featureHtml.substring(Math.max(0, idx - 200), idx);
+      if (contextBefore.includes('<h2>')) {
+        if (currentOccurrence === targetOccurrence) {
+          scenarioNameIndex = idx;
+          break;
+        }
+        currentOccurrence++;
+      }
+      searchPos = idx + headingPattern.length;
+    }
+    
     if (scenarioNameIndex === -1) {
       return;
     }
     
-    // Find the collapse div with logs (class="scenario-step-collapse collapse")
+    // Find the collapse div with logs after THIS specific scenario heading
     const afterName = featureHtml.substring(scenarioNameIndex);
     const collapseMatch = afterName.match(/<div id="([^"]+)" class="scenario-step-collapse collapse">/);
     
@@ -175,7 +239,7 @@ featureFiles.forEach(featureFile => {
       }
     }
     
-    // Create a new collapse ID for the video
+    // Create a unique collapse ID for this video
     const videoCollapseId = collapseId.replace('-text', '-video');
     
     // Create the video collapse HTML
@@ -195,7 +259,7 @@ featureFiles.forEach(featureFile => {
                                 </div>
 `;
     
-    // Find the "+ Show Info" link that points to this collapse
+    // Find the "+ Show Info" link that points to this specific collapse
     const linkPattern = new RegExp(`<a href="#${collapseId}"[^>]*>\\+ Show Info</a>`);
     const linkMatch = featureHtml.match(linkPattern);
     
@@ -236,7 +300,7 @@ featureFiles.forEach(featureFile => {
 });
 
 // Enhance Scenario Outline titles with parameter values
-console.log('🔧 Enhancing Scenario Outline titles with parameters...');
+console.log('🔧 Formatting Scenario Outline with test data section...');
 let scenariosEnhanced = 0;
 
 featureFiles.forEach(featureFile => {
@@ -251,24 +315,36 @@ featureFiles.forEach(featureFile => {
   
   if (!featureData) return;
   
-  // Process each scenario
+  // Step 1: Remove ALL existing datos-prueba-section divs (from previous runs)
+  featureHtml = featureHtml.replace(/<div class="datos-prueba-section"[^>]*>[\s\S]*?<\/div>\s*<\/div>/g, '');
+  
+  // Step 2: Remove old param spans from ALL Scenario Outline titles (before inserting new data)
+  const outlineSpanPattern = /(<h2>Scenario Outline:\s*<small>)<span[^>]*>[^<]*<\/span>/g;
+  featureHtml = featureHtml.replace(outlineSpanPattern, '$1');
+  
+  // Track which occurrence of each scenario name we need to process next
+  const scenarioOccurrenceMap = {};
+  
+  // Process each scenario element from JSON (in order - this order matches the HTML order)
   featureData.elements.forEach(scenario => {
+    // Only process Scenario Outline
+    if (scenario.keyword.trim() !== 'Scenario Outline') return;
+    
     // Extract parameters from step names (they contain the actual values)
     const parameters = {};
     scenario.steps.forEach(step => {
-      // Skip if step name is missing (e.g., hooks)
       if (!step || !step.name) return;
       
-      // Extract values in quotes from step names
       const matches = step.name.match(/"([^"]*)"/g);
       if (matches) {
         matches.forEach(match => {
           const value = match.replace(/"/g, '');
-          // Try to identify the parameter name from the step text
           if (step.name.includes('username')) {
             parameters.username = value;
           } else if (step.name.includes('password')) {
             parameters.password = value;
+          } else if (step.name.includes('error')) {
+            parameters.error = value;
           } else if (step.name.includes('task')) {
             if (!parameters.tasks) parameters.tasks = [];
             parameters.tasks.push(value);
@@ -277,78 +353,98 @@ featureFiles.forEach(featureFile => {
       }
     });
     
-    // If we have parameters, update the scenario title
-    if (Object.keys(parameters).length > 0) {
-      // Create parameter string
-      let paramString = ' | ';
-      const paramParts = [];
-      
-      for (const [key, value] of Object.entries(parameters)) {
-        if (Array.isArray(value)) {
-          paramParts.push(`${key}: ${value.join(', ')}`);
-        } else {
-          paramParts.push(`${key}: ${value}`);
-        }
-      }
-      paramString += paramParts.join('; ');
-      
-      // Find the scenario heading in HTML
-      // Pattern: <h2>Scenario Outline: <small>Name</small></h2> or <h2>Scenario: <small>Name</small></h2>
-      const scenarioNameEscaped = scenario.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      
-      // Try multiple patterns to match different HTML structures
-      const patterns = [
-        // Pattern for Scenario Outline: <h2>Scenario Outline: <small>Name</small></h2>
-        new RegExp(
-          `(<h2>Scenario Outline:\\s*<small>)(${scenarioNameEscaped})(</small></h2>)`,
-          'g'
-        ),
-        // Pattern for Scenario: <h2>Scenario: <small>Name</small></h2>
-        new RegExp(
-          `(<h2>Scenario:\\s*<small>)(${scenarioNameEscaped})(</small></h2>)`,
-          'g'
-        ),
-        // Pattern for plain scenario heading: <h3 class="scenario-heading">Name</h3>
-        new RegExp(
-          `(<h3[^>]*class="[^"]*scenario-heading[^"]*"[^>]*>\\s*${scenarioNameEscaped})(</h3>)`,
-          'g'
-        )
-      ];
-      
-      // Try each pattern
-      let replaced = false;
-      for (const headingPattern of patterns) {
-        const matches = featureHtml.match(headingPattern);
-        if (matches) {
-          // Replace the heading to include parameters
-          featureHtml = featureHtml.replace(headingPattern, (match, ...args) => {
-            // Check if parameters already added
-            if (match.includes(' | ')) return match;
-            scenariosEnhanced++;
-            replaced = true;
-            
-            // For <h2> patterns, args are: [before, name, after]
-            // For <h3> patterns, args are: [before, after]
-            if (args.length === 3) {
-              return `${args[0]}${args[1]}<span style="color: #6c757d; font-size: 0.85em; font-weight: normal;">${paramString}</span>${args[2]}`;
-            } else {
-              return `${args[0]}<span style="color: #6c757d; font-size: 0.9em;">${paramString}</span>${args[1]}`;
-            }
-          });
-          
-          if (replaced) {
-            console.log(`  ✅ Enhanced: ${scenario.name}${paramString}`);
-            break;
-          }
-        }
+    if (Object.keys(parameters).length === 0) return;
+    
+    // Create parameter display
+    const paramParts = [];
+    for (const [key, value] of Object.entries(parameters)) {
+      if (Array.isArray(value)) {
+        paramParts.push(`${key}: ${value.join(', ')}`);
+      } else {
+        paramParts.push(`${key}: ${value}`);
       }
     }
+    const paramString = paramParts.join(', ');
+    
+    // Determine which occurrence of this heading to target
+    if (!scenarioOccurrenceMap[scenario.name]) {
+      scenarioOccurrenceMap[scenario.name] = 0;
+    }
+    const targetOccurrence = scenarioOccurrenceMap[scenario.name];
+    scenarioOccurrenceMap[scenario.name]++;
+    
+    // Find the N-th occurrence of this scenario heading in the HTML
+    const scenarioHeadingText = `<h2>Scenario Outline: <small>${scenario.name}`;
+    let currentOccurrence = 0;
+    let searchPos = 0;
+    let headingIdx = -1;
+    
+    while (searchPos < featureHtml.length) {
+      const idx = featureHtml.indexOf(scenarioHeadingText, searchPos);
+      if (idx === -1) break;
+      
+      if (currentOccurrence === targetOccurrence) {
+        headingIdx = idx;
+        break;
+      }
+      
+      currentOccurrence++;
+      searchPos = idx + scenarioHeadingText.length;
+    }
+    
+    if (headingIdx === -1) return;
+    
+    // Check if test data section already exists for this heading
+    const nextChars = featureHtml.substring(headingIdx, headingIdx + 2000);
+    if (nextChars.includes('datos-prueba-section')) return;
+    
+    // Find the clearfix div after this heading
+    const clearfixPos = featureHtml.indexOf('<div class="clearfix"></div>', headingIdx);
+    if (clearfixPos === -1 || clearfixPos > headingIdx + 2000) return;
+    
+    // Find the closing </div> of x_title
+    const afterClearfix = clearfixPos + '<div class="clearfix"></div>'.length;
+    const closingDiv = featureHtml.indexOf('</div>', afterClearfix);
+    if (closingDiv === -1) return;
+    
+    const insertPoint = closingDiv + '</div>'.length;
+    
+    // Create test data section
+    const testDataSection = `
+            <div class="datos-prueba-section" style="margin: 0 0 5px 0; padding: 12px 20px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-left: 4px solid #007bff; border-radius: 0 4px 4px 0;">
+                <strong style="color: #495057; font-size: 14px; display: block; margin-bottom: 6px;">
+                    <i class="fa fa-database" style="margin-right: 6px; color: #007bff;"></i>Datos de prueba:
+                </strong>
+                <div style="color: #343a40; font-size: 13px; font-family: 'Courier New', monospace; background: white; padding: 8px 12px; border-radius: 4px; border: 1px solid #dee2e6;">
+                    ${paramString}
+                </div>
+            </div>`;
+    
+    // Insert the test data section
+    featureHtml = featureHtml.substring(0, insertPoint) + testDataSection + featureHtml.substring(insertPoint);
+    
+    scenariosEnhanced++;
+    console.log(`  ✅ Formatted: ${scenario.name} | ${paramString}`);
   });
   
   fs.writeFileSync(featurePath, featureHtml);
 });
 
-console.log('✅ Scenario titles enhanced with parameters');
+// Clean up residual param spans from regular Scenarios (non-Outline)
+// These were added by a previous version of the code
+featureFiles.forEach(featureFile => {
+  const featurePath = path.join(featuresDir, featureFile);
+  let featureHtml = fs.readFileSync(featurePath, 'utf8');
+  
+  // Remove spans from regular Scenario headings (not Scenario Outline)
+  const regularScenarioSpanPattern = /(<h2>Scenario:\s*<small>)<span[^>]*>[^<]*<\/span>([^<]+)/g;
+  if (featureHtml.match(regularScenarioSpanPattern)) {
+    featureHtml = featureHtml.replace(regularScenarioSpanPattern, '$1$2');
+    fs.writeFileSync(featurePath, featureHtml);
+  }
+});
+
+console.log(`✅ Scenario Outline formatting completed (${scenariosEnhanced} scenarios formatted)`);
 
 console.log(`📹 Total videos injected in feature files: ${videosInjected}`);
 

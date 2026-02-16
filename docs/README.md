@@ -24,6 +24,8 @@ Step-by-step guides for using the framework.
 - **[USAGE_GUIDE.md](guides/USAGE_GUIDE.md)** - Complete usage guide
 - **[QUICK_REFERENCE.md](guides/QUICK_REFERENCE.md)** - Quick reference for commands
 - **[ENVIRONMENT_SETUP_SUMMARY.md](guides/ENVIRONMENT_SETUP_SUMMARY.md)** - Environment setup instructions
+- **[SAUCEDEMO_FEATURE.md](guides/SAUCEDEMO_FEATURE.md)** - SauceDemo login tests documentation
+- **[TODOMVC_QUICK_REF.md](guides/TODOMVC_QUICK_REF.md)** - TodoMVC quick reference
 
 ### 📊 Reports & Evidence
 Everything about test reports, videos, and screenshots.

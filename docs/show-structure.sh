@@ -1,7 +1,13 @@
 #!/bin/bash
 
 # Script to show project structure
-# Usage: ./show-structure.sh
+# Usage: ./docs/show-structure.sh (from project root)
+#    or: cd docs && ./show-structure.sh
+
+# Navigate to project root if running from docs/
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+cd "$PROJECT_ROOT"
 
 echo "======================================"
 echo "  PROJECT STRUCTURE"
