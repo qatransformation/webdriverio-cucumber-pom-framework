@@ -349,15 +349,26 @@ jsonData.forEach(feature => {
   });
 });
 
-// Find and modify each feature row in the table
-featureDataMap.forEach((data, featureName) => {
-  // Find the feature name link in the table
-  const featureLinkRegex = new RegExp(
-    `(<a[^>]*>)${featureName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(<\\/a>)`,
-    'g'
-  );
+// Find the Features overview table section
+const featuresOverviewStart = htmlContent.indexOf('<h2>Features overview</h2>');
+const featuresOverviewEnd = htmlContent.indexOf('</table>', featuresOverviewStart) + 8;
+
+if (featuresOverviewStart === -1 || featuresOverviewEnd === -1) {
+  console.log('⚠️  Could not find Features overview table');
+} else {
+  // Extract only the Features overview table section
+  const beforeTable = htmlContent.substring(0, featuresOverviewStart);
+  let tableSection = htmlContent.substring(featuresOverviewStart, featuresOverviewEnd);
+  const afterTable = htmlContent.substring(featuresOverviewEnd);
   
-  const featureInfo = `
+  // Find and modify each feature row ONLY in the table section
+  featureDataMap.forEach((data, featureName) => {
+    // Find the feature name link in the table (without 'g' flag to replace only first occurrence)
+    const featureLinkRegex = new RegExp(
+      `(<a[^>]*>)${featureName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(<\\/a>)`
+    );
+    
+    const featureInfo = `
                             <div style="margin-top: 8px; color: #6c757d; font-size: 0.875em;">
                                 <div style="margin-bottom: 6px;">
                                     <i class="fa fa-file-code-o" style="margin-right: 5px;"></i>
@@ -371,9 +382,14 @@ featureDataMap.forEach((data, featureName) => {
                                     </ul>
                                 </div>
                             </div>`;
+    
+    // Replace only in the table section
+    tableSection = tableSection.replace(featureLinkRegex, `$1${featureName}$2${featureInfo}`);
+  });
   
-  htmlContent = htmlContent.replace(featureLinkRegex, `$1${featureName}$2${featureInfo}`);
-});
+  // Reconstruct the HTML
+  htmlContent = beforeTable + tableSection + afterTable;
+}
 
 fs.writeFileSync(reportPath, htmlContent);
 console.log(`✅ Added file paths and scenarios for ${featureDataMap.size} feature(s)`);
