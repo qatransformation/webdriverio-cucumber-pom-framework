@@ -11,7 +11,7 @@ A complete UI test automation architecture has been created implementing:
 ## 📁 Project Structure
 
 ```
-repo/
+webdriverio_cucumber_pom/
 │
 ├── 📂 features/                         # Feature files (Gherkin/BDD)
 │   └── todomvc.feature                  # TodoMVC tests
@@ -39,25 +39,53 @@ repo/
 │   ├── users.json                       # Test users
 │   └── README.md                        # Test data documentation
 │
-├── 📂 test-results/                     # Reports (auto-generated)
-│   ├── cucumber-report.html             # Visual report
-│   ├── cucumber-report.json             # JSON report
-│   └── screenshots/                     # Screenshots on failures
+├── 📂 test-results/                     # Test execution results (auto-generated)
+│   ├── index.html                       # Main execution history
+│   └── executions/                      # Individual execution folders
+│       └── <timestamp>/                 # Each execution with timestamp
+│           ├── cucumber-report.html     # HTML report with videos
+│           ├── videos/                  # Recorded videos
+│           └── screenshots/             # Screenshots
+│
+├── 📂 scripts/                          # Utility scripts
+│   ├── cleanup.js                       # Interactive cleanup menu
+│   └── show-structure.sh                # Display project structure
+│
+├── 📂 docs/                             # 📚 Complete Documentation
+│   ├── README.md                        # Documentation index
+│   │
+│   ├── 📂 architecture/                 # Architecture documentation
+│   │   ├── ARCHITECTURE.md              # Detailed architecture
+│   │   ├── PROJECT_SUMMARY.md           # This file - Project summary
+│   │   ├── VALIDATION.md                # Validation strategy
+│   │   └── architecture-diagram.mmd     # Mermaid diagram
+│   │
+│   ├── 📂 guides/                       # User guides
+│   │   ├── USAGE_GUIDE.md               # Complete usage guide
+│   │   ├── QUICK_REFERENCE.md           # Quick reference
+│   │   ├── TODOMVC_QUICK_REF.md         # TodoMVC specific guide
+│   │   └── ENVIRONMENT_SETUP_SUMMARY.md # Environment setup
+│   │
+│   ├── 📂 reports/                      # Report documentation
+│   │   ├── REPORTS_WITH_VIDEOS.md       # Video recording guide
+│   │   ├── VIDEO_RECORDING.md           # Video configuration
+│   │   ├── VIDEO_REPORT_INTEGRATION.md  # Integration details
+│   │   ├── EXECUTION_HISTORY.md         # History management
+│   │   └── ENHANCED_REPORT.md           # Enhanced features
+│   │
+│   └── PIPELINE_CONFIGURATION.md        # CI/CD setup and Jenkins
 │
 ├── 📄 wdio.conf.ts                      # WebdriverIO configuration
 ├── 📄 tsconfig.json                     # TypeScript configuration
 ├── 📄 package.json                      # Dependencies and scripts
+├── 📄 generate-report.js                # Report generator
+├── 📄 generate-index.js                 # Index generator
+├── 📄 report-server.js                  # Report HTTP server
 ├── 📄 Jenkinsfile                       # Jenkins pipeline configuration
-├── 📄 .env.example                      # Example environment variables
 ├── 📄 .gitignore                        # Files ignored by Git
-├── 📂 .github/workflows/                # GitHub Actions workflows
-│   └── e2e-tests.yml                    # CI/CD configuration
-│
-├── 📖 README.md                         # Main documentation
-├── 📖 ARCHITECTURE.md                   # Detailed architecture
-├── 📖 PIPELINE_CONFIGURATION.md         # CI/CD setup and Jenkins guide
-├── 📖 USAGE_GUIDE.md                    # Usage guide and examples
-└── 📖 PROJECT_SUMMARY.md                # This file
+├── 📄 LICENSE                           # ISC License
+├── 📄 CHANGELOG.md                      # Version history
+└── 📖 README.md                         # Main documentation
 ```
 
 ## 🚀 Quick Start
