@@ -138,12 +138,12 @@ If all validations pass, you're ready to:
 3. ✅ Add new features
 4. ✅ Extend functionality
 
-See [USAGE_GUIDE.md](./USAGE_GUIDE.md) for detailed examples.
+See [USAGE_GUIDE.md](../guides/USAGE_GUIDE.md) for detailed examples.
 
 ## 📧 Support
 
 Check the documentation:
-- [README.md](./README.md) - Quick start
+- [README.md](../../README.md) - Quick start
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - Architecture
-- [USAGE_GUIDE.md](./USAGE_GUIDE.md) - Usage guide
+- [USAGE_GUIDE.md](../guides/USAGE_GUIDE.md) - Usage guide
 - [PROJECT_SUMMARY.md](./PROJECT_SUMMARY.md) - Complete summary

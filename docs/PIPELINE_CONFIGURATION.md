@@ -520,9 +520,10 @@ jobs:
 
 ## 📚 References
 
-- [test.config.json](../test.config.json) - Configuration file
-- [src/config/configLoader.ts](../src/config/configLoader.ts) - Configuration loader
-- [src/support/world.ts](../src/support/world.ts) - Implementation in World
+These files are no longer part of the project (evidence configuration was removed):
+- test.config.json - REMOVED
+- src/config/configLoader.ts - REMOVED
+- Configuration is now always-on for video and screenshot recording
 
 ## 🎉 Advantages
 

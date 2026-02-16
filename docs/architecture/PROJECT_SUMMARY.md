@@ -187,9 +187,9 @@ export class CustomWorld extends World {
 ## 📚 Complete Documentation
 
 ### For Developers
-- **[README.md](./README.md)** - Introduction and setup
+- **[README.md](../../README.md)** - Introduction and setup
 - **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Detailed architecture
-- **[USAGE_GUIDE.md](./USAGE_GUIDE.md)** - Usage guide and examples
+- **[USAGE_GUIDE.md](../guides/USAGE_GUIDE.md)** - Usage guide and examples
 
 ### For QA/Testers
 - See features in `features/` for scenario examples
@@ -228,10 +228,10 @@ export class CustomWorld extends World {
 ## 🎓 Next Steps
 
 ### To Get Started
-1. Read the [README.md](./README.md)
+1. Read the [README.md](../../README.md)
 2. Review examples in `features/`
 3. Run `npm test` to see tests in action
-4. Check [USAGE_GUIDE.md](./USAGE_GUIDE.md) to create new tests
+4. Check [USAGE_GUIDE.md](../guides/USAGE_GUIDE.md) to create new tests
 
 ### To Extend
 1. Create new Page Objects in `src/pages/`

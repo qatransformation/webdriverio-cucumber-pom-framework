@@ -524,7 +524,7 @@ this.context = await this.browser!.newContext({
 - [WebdriverIO Documentation](https://webdriver.io/)
 - [Cucumber Documentation](https://cucumber.io/docs/cucumber/)
 - [BDD Best Practices](https://cucumber.io/docs/bdd/)
-- See [ARCHITECTURE.md](./ARCHITECTURE.md) for architecture details
+- See [ARCHITECTURE.md](../architecture/ARCHITECTURE.md) for architecture details
 
 ## ❓ Troubleshooting
 
