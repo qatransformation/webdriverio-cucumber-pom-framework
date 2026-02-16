@@ -110,76 +110,6 @@ span.keyword.highlight::before {
   font-size: 13px;
   content: attr(data-label);
 }
-/* Estilos para tags como lista desordenada */
-.tags {
-  display: inline-block;
-}
-.tags ul.tag-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
-}
-.tags ul.tag-list li {
-  display: inline-block;
-  padding: 4px 12px;
-  background: #007bff;
-  color: white;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  margin: 0;
-}
-.tags ul.tag-list li::before {
-  content: none !important;
-}
-body.darkmode .tags ul.tag-list li {
-  background: #0056b3;
-}
-</style>
-<script>
-// Convert tags to unordered list
-document.addEventListener('DOMContentLoaded', function() {
-  const tagContainers = document.querySelectorAll('.tags');
-  
-  tagContainers.forEach(container => {
-    // Find all tag spans
-    const tagSpans = container.querySelectorAll('span.tag');
-    
-    if (tagSpans.length > 0) {
-      // Create unordered list
-      const ul = document.createElement('ul');
-      ul.className = 'tag-list';
-      
-      // Convert each span to list item
-      tagSpans.forEach(span => {
-        const li = document.createElement('li');
-        li.textContent = span.textContent.trim();
-        ul.appendChild(li);
-      });
-      
-      // Find the icon (if exists) and keep it
-      const icon = container.querySelector('i.fa-tags');
-      
-      // Clear container and rebuild
-      container.innerHTML = '';
-      
-      if (icon) {
-        container.appendChild(icon);
-        container.appendChild(document.createTextNode(' '));
-      }
-      
-      container.appendChild(ul);
-    }
-  });
-});
-</script>
-`;
-  content: attr(data-label);
-}
 </style>
 `;
 
@@ -307,6 +237,7 @@ featureFiles.forEach(featureFile => {
 
 // Enhance Scenario Outline titles with parameter values
 console.log('🔧 Enhancing Scenario Outline titles with parameters...');
+let scenariosEnhanced = 0;
 
 featureFiles.forEach(featureFile => {
   const featurePath = path.join(featuresDir, featureFile);
@@ -518,86 +449,42 @@ fs.writeFileSync(reportPath, htmlContent);
 console.log(`✅ Removed ${rowsToRemove.length} duplicate feature(s) from table`);
 
 // Inject CSS and JavaScript for tags in index.html
-console.log('🔧 Adding tag list styling to index.html...');
+console.log('🔧 Customizing tags display in index.html...');
 htmlContent = fs.readFileSync(reportPath, 'utf8');
 
-// CSS and JS for tags (without video styles)
-const tagsCustomization = `
-<style>
-/* Estilos para tags como lista desordenada */
-.tags {
-  display: inline-block;
-}
-.tags ul.tag-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
-}
-.tags ul.tag-list li {
-  display: inline-block;
-  padding: 4px 12px;
-  background: #007bff;
-  color: white;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  margin: 0;
-}
-.tags ul.tag-list li::before {
-  content: none !important;
-}
-body.darkmode .tags ul.tag-list li {
-  background: #0056b3;
-}
-</style>
-<script>
-// Convert tags to unordered list
-document.addEventListener('DOMContentLoaded', function() {
-  const tagContainers = document.querySelectorAll('.tags');
-  
-  tagContainers.forEach(container => {
-    // Find all tag spans
-    const tagSpans = container.querySelectorAll('span.tag');
-    
-    if (tagSpans.length > 0) {
-      // Create unordered list
-      const ul = document.createElement('ul');
-      ul.className = 'tag-list';
-      
-      // Convert each span to list item
-      tagSpans.forEach(span => {
-        const li = document.createElement('li');
-        li.textContent = span.textContent.trim();
-        ul.appendChild(li);
-      });
-      
-      // Find the icon (if exists) and keep it
-      const icon = container.querySelector('i.fa-tags');
-      
-      // Clear container and rebuild
-      container.innerHTML = '';
-      
-      if (icon) {
-        container.appendChild(icon);
-        container.appendChild(document.createTextNode(' '));
-      }
-      
-      container.appendChild(ul);
-    }
-  });
-});
-</script>
-`;
+// 1. Change table header from icon to "@tag"
+htmlContent = htmlContent.replace(
+  /<th><i class="fa fa-tags fa-lg" title="Tags"><\/i><\/th>/,
+  '<th>@tag</th>'
+);
 
-if (!htmlContent.includes('tag-list')) {
-  htmlContent = htmlContent.replace('</head>', tagsCustomization + '</head>');
-  fs.writeFileSync(reportPath, htmlContent);
-  console.log('✅ Tag list styling added to index.html');
-}
+// 2. Transform tag cells from icon to "@tag" with list
+// Pattern: <i class="fa fa-tags fa-lg" ... title="tags"><span>tags</span></i>
+const tagCellPattern = /<i class="fa fa-tags fa-lg"[^>]*title="([^"]*)"[^>]*>\s*<span>[^<]*<\/span>\s*<\/i>/g;
+
+htmlContent = htmlContent.replace(tagCellPattern, (match, tagsTitle) => {
+  // Extract individual tags from title (e.g., "@saucedemo @login @smoke")
+  const tags = tagsTitle.trim().split(/\s+/).filter(tag => tag.startsWith('@'));
+  
+  if (tags.length === 0) {
+    return '<div>@tag<br><span style="color: #999;">No tags</span></div>';
+  }
+  
+  // Create unordered list
+  const tagItems = tags.map(tag => `<li style="list-style: none; display: inline-block; padding: 3px 10px; margin: 2px; background: #007bff; color: white; border-radius: 3px; font-size: 11px;">${tag}</li>`).join('');
+  
+  return `<div style="padding: 5px 0;">
+    <strong style="color: #495057; font-size: 13px;">@tag</strong>
+    <ul style="padding: 0; margin: 5px 0 0 0; display: flex; flex-wrap: wrap; gap: 4px;">
+      ${tagItems}
+    </ul>
+  </div>`;
+});
+
+console.log('✅ Tags display customized in index.html');
+
+// Write the modified HTML back to file
+fs.writeFileSync(reportPath, htmlContent);
 
 console.log('✅ Report post-processed successfully!');
 console.log('📊 Report location: test-results/index.html');
