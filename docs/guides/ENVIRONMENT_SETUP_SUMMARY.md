@@ -16,7 +16,7 @@ To run all tests in different configurations in CI/CD pipelines.
 
 ### 1. Main Configuration File
 
-**[test.config.json](test.config.json)** - Centralized configuration
+**test.config.json** - REMOVED (Evidence configuration was eliminated)
 ```json
 {
   "environments": {
@@ -37,7 +37,7 @@ To run all tests in different configurations in CI/CD pipelines.
 
 ### 2. Configuration Loader
 
-**[src/config/configLoader.ts](src/config/configLoader.ts)** - Class to load and manage configuration
+**src/config/configLoader.ts** - REMOVED (Evidence configuration was eliminated)
 - `getEnvironment()` - Gets environment configuration
 - `getBrowser()` - Gets browser configuration
 - `printCurrentConfig()` - Shows current configuration
@@ -45,7 +45,7 @@ To run all tests in different configurations in CI/CD pipelines.
 
 ### 3. CustomWorld Integration
 
-**[src/support/world.ts](src/support/world.ts)** - Updated to use external configuration
+**[src/support/world.ts](../../src/support/world.ts)** - Custom World implementation
 - Reads configuration from `test.config.json`
 - Applies baseURL according to environment
 - Configures browser according to specification
@@ -53,7 +53,7 @@ To run all tests in different configurations in CI/CD pipelines.
 
 ### 4. Updated Hooks
 
-**[src/support/hooks.ts](src/support/hooks.ts)** - Shows configuration at start
+**[src/support/hooks.ts](../../src/support/hooks.ts)** - Before/After hooks
 ```
 📋 Test Configuration
 ========================
@@ -67,7 +67,7 @@ To run all tests in different configurations in CI/CD pipelines.
 
 ### 5. Complete Documentation
 
-**[PIPELINE_CONFIGURATION.md](PIPELINE_CONFIGURATION.md)** - Complete configuration guide
+**[PIPELINE_CONFIGURATION.md](../PIPELINE_CONFIGURATION.md)** - Complete configuration guide
 - Local usage with environment variables
 - GitHub Actions examples
 - GitLab CI examples
@@ -77,7 +77,7 @@ To run all tests in different configurations in CI/CD pipelines.
 
 ### 6. Example Pipeline
 
-**[.github/workflows/e2e-tests.yml](.github/workflows/e2e-tests.yml)** - Complete GitHub Actions workflow
+**.github/workflows/e2e-tests.yml** - NOT IMPLEMENTED YET
 - Smoke tests on PRs
 - Tests with matrix of environments/browsers
 - Production tests only on main
@@ -295,11 +295,11 @@ workflow_dispatch:
 
 ## 📚 References
 
-- **[test.config.json](test.config.json)** - Configuration file
-- **[src/config/configLoader.ts](src/config/configLoader.ts)** - Configuration loader
-- **[PIPELINE_CONFIGURATION.md](PIPELINE_CONFIGURATION.md)** - Complete documentation
-- **[.github/workflows/e2e-tests.yml](.github/workflows/e2e-tests.yml)** - Example pipeline
-- **[README.md](README.md)** - Updated with usage instructions
+- **test.config.json** - REMOVED (Evidence configuration eliminated)
+- **src/config/configLoader.ts** - REMOVED (Evidence configuration eliminated)
+- **[PIPELINE_CONFIGURATION.md](../PIPELINE_CONFIGURATION.md)** - Complete CI/CD documentation
+- **[wdio.conf.ts](../../wdio.conf.ts)** - WebdriverIO main configuration
+- **[README.md](../../README.md)** - Project main documentation
 
 ## ✨ Conclusion
 
