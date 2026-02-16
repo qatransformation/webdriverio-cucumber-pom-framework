@@ -131,19 +131,24 @@ npm run test:report
 
 ## 🧹 History Cleanup
 
-### Delete from Web Interface
-Use the delete button on each execution row in the main page.
+The execution history is **read-only** from the web interface. Use NPM scripts or the interactive cleanup menu to manage disk space.
 
-**📸 Delete Functionality:**
+### Interactive Cleanup Menu
+```bash
+npm run clean:interactive
+```
+This opens an interactive menu with options to:
+1. Delete only videos (keep reports and screenshots)
+2. Delete videos and screenshots (keep reports)
+3. Delete all executions (keep main index)
+4. Delete everything (complete cleanup)
+5. Cancel
 
-![Delete Button Confirmation](docs/screenshots/delete-button-confirmation.png)
-*Delete button with confirmation dialog for removing specific executions*
-
-### Clean old executions
+### Clean all executions
 ```bash
 npm run clean
 ```
-This removes all executions but keeps the structure.
+This removes all executions but keeps the main index structure.
 
 ### Clean everything
 ```bash
