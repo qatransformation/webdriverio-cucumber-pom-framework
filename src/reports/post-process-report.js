@@ -330,6 +330,54 @@ featureFiles.forEach(featureFile => {
 
 console.log(`📹 Total videos injected in feature files: ${videosInjected}`);
 
+// Add feature file path and scenario names to Features overview table
+console.log('🔧 Adding feature file paths and scenario names to Features overview table...');
+htmlContent = fs.readFileSync(reportPath, 'utf8');
+
+// Create a map of feature names to their data
+const featureDataMap = new Map();
+jsonData.forEach(feature => {
+  const featureName = feature.name;
+  const featureUri = feature.uri; // e.g., "features/todomvc.feature"
+  const scenarios = feature.elements
+    .filter(el => el.type === 'scenario')
+    .map(el => el.name);
+  
+  featureDataMap.set(featureName, {
+    uri: featureUri,
+    scenarios: scenarios
+  });
+});
+
+// Find and modify each feature row in the table
+featureDataMap.forEach((data, featureName) => {
+  // Find the feature name link in the table
+  const featureLinkRegex = new RegExp(
+    `(<a[^>]*>)${featureName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(<\\/a>)`,
+    'g'
+  );
+  
+  const featureInfo = `
+                            <div style="margin-top: 8px; color: #6c757d; font-size: 0.875em;">
+                                <div style="margin-bottom: 6px;">
+                                    <i class="fa fa-file-code-o" style="margin-right: 5px;"></i>
+                                    <code style="background: #f1f3f5; padding: 2px 6px; border-radius: 3px; font-size: 0.9em;">${data.uri}</code>
+                                </div>
+                                <div style="margin-top: 6px;">
+                                    <i class="fa fa-list-ul" style="margin-right: 5px;"></i>
+                                    <strong style="font-size: 0.9em;">Scenarios:</strong>
+                                    <ul style="margin: 4px 0 0 20px; padding: 0; list-style: disc;">
+                                        ${data.scenarios.map(s => `<li style="margin: 2px 0;">${s}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>`;
+  
+  htmlContent = htmlContent.replace(featureLinkRegex, `$1${featureName}$2${featureInfo}`);
+});
+
+fs.writeFileSync(reportPath, htmlContent);
+console.log(`✅ Added file paths and scenarios for ${featureDataMap.size} feature(s)`);
+
 // Remove duplicate feature rows from the Features overview table in index.html
 console.log('🔧 Removing duplicate features from Features overview table...');
 htmlContent = fs.readFileSync(reportPath, 'utf8');
