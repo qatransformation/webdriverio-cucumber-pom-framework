@@ -2,7 +2,7 @@
   "name": "webdriverio-cucumber-framework",
   "author": "QA Transformation to IA - www.qatransformation.ai",
   "license": "ISC",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "WebdriverIO + Cucumber + Page Object Model - UI Automation Framework",
   "main": "index.js",
   "scripts": {

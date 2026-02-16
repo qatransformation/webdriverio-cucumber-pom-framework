@@ -5,7 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.0] - 2026-02-16
+
+### Added
+- **Automatic report server startup** with browser opening
+  - New script `scripts/open-report-server.js`
+  - Detects if server is already running
+  - Starts server in background if needed
+  - Automatically opens browser to http://localhost:8080
+  - Cross-platform support (macOS, Windows, Linux)
+- **Enhanced NPM scripts** with automatic workflow
+  - `test:open` - Run tests, generate reports, open in browser
+  - `test:smoke:open` - Run smoke tests with auto-open
+  - `test:tag:open` - Run tagged tests with auto-open
+  - `serve:open` - Start server and open browser
 
 ### Changed
 - **Video embedding optimized** - videos only in feature detail pages
@@ -14,14 +27,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Access via "+View Video" links in feature pages
 - **Improved report performance** - execution index loads instantly
 - **Better UX** - videos where they matter most (feature details)
-- **Updated documentation** to reflect optimized video placement
+- **Updated documentation** to reflect all new features and optimizations
+
+### Fixed
+- **Report generation robustness** - now works even when tests exit with non-zero code
+  - Removed posttest hook (doesn't run on test "failure")
+  - Added explicit `npm run report:generate` to all :open scripts
+  - Guarantees index.html creation before server startup
+  - Fixes 404 error when accessing localhost:8080
+  - Workflow now robust against WebdriverIO exit code bug
 
 ### Technical Details
 - Modified `src/reports/post-process-report.js` - removed index.html video injection
+- Created `scripts/open-report-server.js` - automatic server management
+- Updated package.json scripts - explicit report generation
 - Videos location: `test-results/executions/<timestamp>/videos/`
 - Videos embedded in: `test-results/executions/<timestamp>/features/*.html`
 - Videos NOT in: `test-results/executions/<timestamp>/index.html`
 - Format: WebM with collapsible "+View Video" sections
+- Server: HTTP on port 8080, serves test-results/
 
 ## [1.0.0] - 2026-02-16
 
