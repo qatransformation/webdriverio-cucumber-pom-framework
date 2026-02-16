@@ -47,10 +47,10 @@ test-results/
 
 **📸 Main Page Preview:**
 
-![Execution History Main Page](docs/screenshots/execution-history-main.png)
+![Execution History Main Page](../screenshots/execution-history-main.png.placeholder)
 *Main execution history page showing all test runs with statistics and status*
 
-![Statistics Dashboard](docs/screenshots/report-statistics-dashboard.png)
+![Statistics Dashboard](../screenshots/report-statistics-dashboard.png.placeholder)
 *Dashboard with execution statistics: Total, Passed, Failed, and Last Execution*
 
 ### Individual Reports
@@ -63,13 +63,13 @@ Each execution has its own report with:
 
 **📸 Individual Report Preview:**
 
-![Execution Report Detail](docs/screenshots/execution-report-detail.png)
+![Execution Report Detail](../screenshots/execution-report-detail.png.placeholder)
 *Detailed view of an individual execution report with Cucumber steps and results*
 
-![Report Video Collapse](docs/screenshots/report-video-collapse.png)
+![Report Video Collapse](../screenshots/report-video-collapse.png.placeholder)
 *Video player section showing recorded test execution*
 
-![Report Logs Collapse](docs/screenshots/report-logs-collapse.png)
+![Report Logs Collapse](../screenshots/report-logs-collapse.png.placeholder)
 *Execution logs section with browser console, page info, and debug data*
 
 ## 🚀 Usage

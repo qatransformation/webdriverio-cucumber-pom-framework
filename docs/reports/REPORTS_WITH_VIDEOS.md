@@ -44,10 +44,10 @@ The report is generated at: `test-results/index.html`
 
 **📸 Report Screenshots:**
 
-![Execution History Main Page](docs/screenshots/execution-history-main.png)
+![Execution History Main Page](../screenshots/execution-history-main.png.placeholder)
 *Main execution history page with statistics and execution list*
 
-![Execution Report Detail](docs/screenshots/execution-report-detail.png)
+![Execution Report Detail](../screenshots/execution-report-detail.png.placeholder)
 *Detailed view of an individual execution report with Cucumber steps*
 
 ## 🎥 Videos
@@ -57,7 +57,7 @@ Videos are saved in: `test-results/videos/`
 
 **📸 Video Integration:**
 
-![Video Player in Report](docs/screenshots/report-video-collapse.png)
+![Video Player in Report](../screenshots/report-video-collapse.png.placeholder)
 *Video player embedded in the report - click "+ View Video" to expand*
 
 ### Example of Generated Videos
@@ -206,10 +206,10 @@ test-results/
 
 **📸 Report Structure Visualization:**
 
-![Statistics Dashboard](docs/screenshots/report-statistics-dashboard.png)
+![Statistics Dashboard](../screenshots/report-statistics-dashboard.png.placeholder)
 *Dashboard with execution statistics (Total, Passed, Failed, Last Execution)*
 
-![Execution Logs](docs/screenshots/report-logs-collapse.png)
+![Execution Logs](../screenshots/report-logs-collapse.png.placeholder)
 *Execution logs section showing browser console, page info, and debug data*
 
 ## 🔧 Troubleshooting
