@@ -1,11 +1,26 @@
 const report = require('multiple-cucumber-html-reporter');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const { getExecutionDir, getExecutionTimestamp } = require('./execution-timestamp');
 
 // Get current execution directory
 const executionDir = getExecutionDir();
 const executionTimestamp = getExecutionTimestamp();
+
+// Helper function to get human-readable OS name
+function getOSName() {
+  const platform = process.platform;
+  const osMap = {
+    'darwin': 'macOS',
+    'win32': 'Windows',
+    'linux': 'Linux',
+    'freebsd': 'FreeBSD',
+    'openbsd': 'OpenBSD',
+    'sunos': 'SunOS'
+  };
+  return osMap[platform] || platform;
+}
 
 console.log(`📊 Generating report for execution: ${executionTimestamp}`);
 console.log(`📁 Using directory: ${executionDir}`);
@@ -187,22 +202,22 @@ report.generate({
   displayReportTime: true,
   openReportInBrowser: false,
   disableLog: false,
-  pageFooter: '<div><p>Test Execution Report - TodoMVC Framework | Videos Embedded</p></div>',
+  pageFooter: '<div><p>Test Execution Report - Automation Framework | Videos Embedded</p></div>',
   metadata: {
     browser: {
       name: 'chrome',
       version: 'latest'
     },
-    device: 'Local Machine',
+    device: 'Desktop',
     platform: {
-      name: process.platform,
-      version: process.version
+      name: getOSName(),
+      version: os.release()
     }
   },
   customData: {
     title: 'Execution Information',
     data: [
-      { label: 'Project', value: 'TodoMVC Automation Framework' },
+      { label: 'Project', value: 'WebdriverIO + Cucumber + POM Framework' },
       { label: 'Framework', value: 'WebdriverIO + Cucumber + POM' },
       { label: 'Execution ID', value: executionTimestamp },
       { label: 'Date', value: formattedDate },

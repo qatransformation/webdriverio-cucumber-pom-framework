@@ -130,7 +130,7 @@ const html = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TodoMVC - Test Execution History</title>
+  <title>Test Execution History - WebdriverIO + Cucumber</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
   <style>
     body {
@@ -246,7 +246,7 @@ const html = `<!DOCTYPE html>
 <body>
   <div class="container">
     <div class="main-header">
-      <h1>🎯 TodoMVC - Test Execution History</h1>
+      <h1>🎯 Test Execution History</h1>
       <p>Complete history of automated test executions with detailed reports</p>
     </div>
 

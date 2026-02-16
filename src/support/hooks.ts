@@ -1,7 +1,7 @@
 import { Before, After, BeforeAll, AfterAll } from '@wdio/cucumber-framework';
 import { CustomWorld } from './world';
 import { browser } from '@wdio/globals';
-const { getExecutionDir } = require('../../execution-timestamp');
+const { getExecutionDir } = require('../reports/execution-timestamp');
 
 /**
  * Global hooks for test configuration
