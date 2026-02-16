@@ -12,9 +12,9 @@ Professional UI test automation framework featuring WebdriverIO v9, Cucumber BDD
 - 🌐 **WebdriverIO v9.24.0** - Modern browser automation
 - 🥒 **Cucumber BDD** - Behavior-driven testing with Gherkin
 - 📄 **Page Object Model** - Maintainable test architecture
-- 📹 **Video Recording** - Automatic video capture for all tests
+- 📹 **Video Recording** - Automatic video capture (saved to disk)
 - 📸 **Screenshots** - Automatic screenshot capture
-- 📊 **Enhanced Reports** - HTML reports with embedded videos
+- 📊 **Enhanced Reports** - Fast HTML reports with execution history
 - 📝 **Execution History** - Track all test runs with timestamps
 - 🧹 **Interactive Cleanup** - Manage test artifacts and disk space
 - 🎯 **Tag-based Execution** - Run tests by tags (@smoke, @regression, etc.)
@@ -112,7 +112,8 @@ webdriverio_cucumber_pom/
 All test executions are automatically recorded:
 - **Format:** WebM
 - **Location:** `test-results/executions/<timestamp>/videos/`
-- **Integration:** Embedded in HTML reports
+- **Access:** Manual playback from execution directories
+- **Note:** Videos are NOT embedded in HTML reports for better performance
 
 ## 📊 Reports
 
@@ -127,12 +128,13 @@ npm run serve:report  # Start HTTP server
 
 ### Report Features
 
-- ✅ Embedded video players
+- 📹 Videos recorded (manual access from execution folders)
 - 📸 Screenshots on all tests
 - 📝 Detailed step-by-step execution
 - 🔍 Browser console logs on failures
 - ⏱️ Execution duration per scenario
 - 📊 Statistics dashboard
+- ⚡ Fast loading (no embedded videos)
 
 ## 🧹 Cleanup Utilities
 

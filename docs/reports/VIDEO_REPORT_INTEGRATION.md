@@ -1,61 +1,71 @@
-# 🎥 Videos en el Reporte - Guía Rápida
+# 🎥 Videos en el Framework - Guía Rápida
 
-## ✅ Solución Implementada
+## ✅ Configuración Actual
 
-Los videos ahora se muestran correctamente en el reporte HTML mediante inyección de JavaScript.
+Los videos se graban automáticamente para todas las ejecuciones pero **NO se embeben** en los reportes HTML.
 
-## 🚀 Cómo Ver los Videos
+**Razón:** Los reportes se mantienen simples y rápidos de cargar. Los videos están disponibles en las carpetas de ejecución para revisión manual cuando sea necesario.
+
+## 🚀 Cómo Acceder a los Videos
 
 ### 1. Ejecutar Tests
 ```bash
 npm test
 ```
 
-### 2. Abrir el Reporte
+### 2. Localizar los Videos
+
+Los videos se guardan en:
 ```bash
-open test-results/index.html
+test-results/executions/[timestamp]/videos/
 ```
 
-### 3. Ver los Videos en el Reporte
+### 3. Reproducir Videos
 
-**Pasos:**
-1. El reporte se abrirá en tu navegador
-2. Click en cualquier **Feature** para expandirlo
-3. Click en cualquier **Scenario** para ver los detalles
-4. **Scroll hacia abajo** en el escenario
-5. Verás el reproductor de video con el título "🎥 Video Recording"
-6. Click en **Play** para reproducir el video
-7. Puedes hacer **fullscreen**, pausar, adelantar, etc.
-8. También hay un botón **"⬇️ Download Video"** para descargar
+**Opción 1: Finder/File Explorer**
+1. Navega a `test-results/executions/`
+2. Abre la carpeta de la ejecución (ej: `2026-02-16_19-42-50`)
+3. Entra a la carpeta `videos/`
+4. Haz doble clic en cualquier archivo `.webm` para reproducirlo
+
+**Opción 2: Terminal**
+```bash
+# Listar videos disponibles
+ls test-results/executions/*/videos/*.webm
+
+# Abrir un video específico (macOS)
+open test-results/executions/2026-02-16_19-42-50/videos/Add-and-manage-complete-tasks-0-0--CHROME--02-16-2026--19-42-54.webm
+```
+
+**Opción 3: Navegador**
+1. Abre Chrome o Firefox
+2. Arrastra el archivo `.webm` a la ventana del navegador
+3. El video se reproducirá automáticamente
 
 ## 🔧 Cómo Funciona
 
-### Post-Procesamiento Automático
+### Grabación Automática
 
-El sistema usa un script de post-procesamiento que:
+El sistema graba videos automáticamente:
 
-1. **generate-report.js** genera el reporte HTML base
-2. **post-process-report.js** se ejecuta automáticamente y:
-   - Lee los videos de `test-results/videos/`
-   - Lee los escenarios de `cucumber-report.json`
-   - Asocia cada video con su escenario
-   - Inyecta CSS personalizado en el `<head>`
-   - Inyecta JavaScript en el `<body>`
-   - El JavaScript inserta reproductores de video dinámicamente
+1. **wdio.conf.ts** configura wdio-video-reporter
+2. Los videos se graban durante la ejecución de tests
+3. Se guardan en `test-results/executions/[timestamp]/videos/`
+4. **post-process-report.js** NO inyecta videos (grabación solamente)
+5. Videos disponibles para revisión manual cuando sea necesario
 
-### JavaScript Inyectado
+### Configuración
 
-El JavaScript busca los escenarios en el DOM y les agrega:
-```html
-<div class="video-container">
-  <h4>🎥 Video Recording</h4>
-  <video class="video-player" controls preload="metadata">
-    <source src="videos/[nombre-video].webm" type="video/webm">
-  </video>
-  <a href="videos/[nombre-video].webm" download>
-    ⬇️ Download Video
-  </a>
-</div>
+```typescript
+// wdio.conf.ts
+reporters: [
+    'spec',
+    [video, {
+        saveAllVideos: true,
+        outputDir: `${executionDir}/videos/`,
+        maxTestNameLength: 100
+    }]
+]
 ```
 
 ## 📊 Verificación
@@ -63,85 +73,78 @@ El JavaScript busca los escenarios en el DOM y les agrega:
 Para verificar que los videos están disponibles:
 
 ```bash
-# Ver cuántos videos se encontraron
-grep "Found.*video" test-results/index.html
+# Listar todos los videos grabados
+ls -lh test-results/executions/*/videos/*.webm
 
-# Verificar que el JavaScript está inyectado
-grep "Injecting videos" test-results/index.html
+# Ver cuántos videos hay en la última ejecución
+ls test-results/executions/$(ls -t test-results/executions/ | head -1)/videos/ | wc -l
 
-# Listar videos disponibles
-ls -lh test-results/videos/*.webm
+# Abrir carpeta de videos de la última ejecución
+open test-results/executions/$(ls -t test-results/executions/ | head -1)/videos/
 ```
-
 ## 🎯 Resultado
 
 Cuando ejecutas `npm test`:
 
 1. ✅ Tests se ejecutan
-2. ✅ Videos se graban (11 videos)
+2. ✅ Videos se graban automáticamente
 3. ✅ Reporte HTML se genera
-4. ✅ Videos se inyectan automáticamente en el HTML
-5. ✅ Abres el reporte y los videos están ahí
+4. ✅ Videos quedan disponibles en carpetas de ejecución
+5. ✅ Acceso manual a videos cuando sea necesario
 
-## 📂 Archivos Creados/Modificados
+## 📂 Archivos del Sistema
 
-### Nuevos Archivos
-- **post-process-report.js**: Script de post-procesamiento
-
-### Archivos Modificados
-- **generate-report.js**: Ahora ejecuta el post-procesamiento automáticamente
+### Archivos Principales
+- **src/reports/post-process-report.js**: Procesa reportes (paths y scenarios)
+- **src/reports/generate-report.js**: Genera reportes HTML
+- **src/reports/generate-index.js**: Genera índice de ejecuciones
+- **wdio.conf.ts**: Configuración de grabación de videos
 
 ## 🔍 Solución de Problemas
 
-### Los videos no aparecen
+### No se graban videos
 
 **Verificar:**
 ```bash
-# 1. Verificar que hay videos
-ls test-results/videos/*.webm
+# 1. Verificar que existen videos
+ls test-results/executions/*/videos/*.webm
 
-# 2. Regenerar el reporte
-npm run report:generate
+# 2. Verificar configuración
+grep "saveAllVideos" wdio.conf.ts
 
-# 3. Abrir en navegador compatible
-open test-results/index.html
+# 3. Verificar reporter
+grep "video" wdio.conf.ts
 ```
 
-### Error "Videos not found"
+### Error al ejecutar tests
 
 Asegúrate de que:
-- Los tests generaron videos
-- La carpeta `test-results/videos/` existe
-- Los archivos `.webm` están en esa carpeta
-
-### Los videos no se reproducen
-
-**Navegadores compatibles con WebM:**
-- ✅ Chrome/Chromium
-- ✅ Firefox
-- ✅ Edge
-- ✅ Opera
-- ⚠️ Safari (requiere plugin en versiones antiguas)
+- wdio-video-reporter está instalado
+- La configuración en wdio.conf.ts es correcta
+- La carpeta de ejecución se crea correctamente
 
 ## 💡 Tips
 
-1. **Tamaño de Pantalla**: Los videos se adaptan al ancho pero tienen un máximo de 900px
-2. **Controles**: Usa los controles nativos del navegador (play, pause, fullscreen)
-3. **Descarga**: Click en "Download Video" para guardar el video localmente
-4. **Performance**: Los videos usan `preload="metadata"` para no cargar todo al inicio
+1. **Ubicación**: Videos siempre en `test-results/executions/[timestamp]/videos/`
+2. **Formato**: WebM - compatible con la mayoría de navegadores y reproductores
+3. **Nombres**: Incluyen nombre de scenario, browser y timestamp
+4. **Acceso**: Navega a la carpeta o arrastra al navegador
+5. **Limpieza**: Elimina carpetas de ejecuciones antiguas para liberar espacio
 
 ## ✅ Resumen
 
-**Antes:**
-- ❌ Videos en carpeta separada
-- ❌ Necesitabas buscar y abrir archivos manualmente
-- ❌ Difícil correlación video-test
+**Configuración Actual:**
+- ✅ Videos se graban automáticamente
+- ✅ Guardados en carpetas de ejecución
+- ✅ NO embebidos en reportes HTML
+- ✅ Reportes más rápidos y simples
+- ✅ Videos accesibles para revisión manual
 
-**Ahora:**
-- ✅ Videos integrados en el reporte
-- ✅ Cada escenario muestra su video
-- ✅ Reproducción directa en el navegador
-- ✅ Fácil navegación y debug
+**Ventajas:**
+- Reportes cargan más rápido
+- Menor uso de memoria del navegador
+- Videos disponibles cuando realmente se necesitan
+- Estructura de archivos más clara
 
 ---
 

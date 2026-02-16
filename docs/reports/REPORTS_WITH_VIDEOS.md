@@ -1,12 +1,15 @@
-# 📊 Reports with Videos - WebdriverIO + Cucumber
+# 📊 Test Reports - WebdriverIO + Cucumber
 
 ## 📹 Video Recording
 
-Videos are automatically recorded for all test executions. Video files are saved in `.webm` format and embedded directly in the HTML report.
+Videos are automatically recorded for all test executions. Video files are saved in `.webm` format in each execution directory.
+
+**Important:** Videos are **NOT embedded** in HTML reports. They are saved to disk for manual review when needed.
 
 - **Location:** `test-results/executions/<timestamp>/videos/`
 - **Format:** WebM
 - **Recording:** Always enabled for all test scenarios
+- **Access:** Manual playback from execution directories
 
 ## 📸 Screenshots
 
@@ -53,25 +56,27 @@ The report is generated at: `test-results/index.html`
 ## 🎥 Videos
 
 ### Location
-Videos are saved in: `test-results/videos/`
+Videos are saved in each execution directory:
 
-**📸 Video Integration:**
+```
+test-results/executions/2026-02-16_19-42-50/videos/
+```
 
-![Video Player in Report](../screenshots/report-video-collapse.png.placeholder)
-*Video player embedded in the report - click "+ View Video" to expand*
+**Note:** Videos are recorded but NOT embedded in HTML reports. Access them manually from the execution directories.
 
 ### Example of Generated Videos
 ```
-test-results/videos/
-├── Scenario-name-0-0--CHROME--MM-DD-YYYY--HH-MM-SS-milliseconds.webm
-├── Another-scenario-0-0--CHROME--MM-DD-YYYY--HH-MM-SS-milliseconds.webm
+test-results/executions/2026-02-16_19-42-50/videos/
+├── Scenario-name-0-0--CHROME--02-16-2026--19-42-54.webm
+├── Another-scenario-0-0--CHROME--02-16-2026--19-43-10.webm
 └── ...
 ```
 
 ### Format
 - **Format**: WebM
-- **Playback**: Modern browsers, VLC, QuickTime (with plugin)
+- **Playback**: Modern browsers, VLC, QuickTime (with plugin), Chrome, Firefox
 - **Name**: `[Scenario]-[Worker]--[Browser]--[Date]--[Time].webm`
+- **Access**: Navigate to execution directory and open .webm files directly
 
 ## 🔧 Technical Configuration
 

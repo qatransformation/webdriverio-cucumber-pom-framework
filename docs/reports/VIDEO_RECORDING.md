@@ -2,7 +2,11 @@
 
 ## 📖 Description
 
-This guide explains how to use the video recording functionality in the testing framework. Videos are useful for:
+This guide explains the video recording functionality in the testing framework. Videos are **automatically recorded** for all test executions and saved to disk for manual review.
+
+**Important:** Videos are recorded but **NOT embedded** in HTML reports. They are available in the execution directories for manual playback when needed.
+
+### Videos are useful for:
 - 🐛 Debugging failed tests
 - 📊 Documenting test cases
 - 🔍 Post-mortem analysis in CI/CD
@@ -32,15 +36,18 @@ RECORD_VIDEO=true npm run test:smoke
 
 ## 📋 Video Location
 
-Videos are automatically saved in:
+Videos are automatically saved in each execution directory:
 
 ```
 test-results/
-└── videos/
-    ├── Add_and_manage_complete_tasks_2026-02-15T16-44-10.webm
-    ├── Add_multiple_tasks_2026-02-15T16-45-23.webm
-    ├── Delete_specific_task_2026-02-15T16-46-15.webm
-    └── ...
+└── executions/
+    └── 2026-02-16_19-42-50/
+        ├── videos/
+        │   ├── Add-and-manage-complete-tasks-0-0--CHROME--02-16-2026--19-42-54.webm
+        │   ├── Add-multiple-tasks-0-0--CHROME--02-16-2026--19-43-10.webm
+        │   └── ...
+        ├── screenshots/
+        └── index.html
 ```
 
 **Filename format:** `[Scenario_name]_[YYYY-MM-DDTHH-MM-SS].webm`

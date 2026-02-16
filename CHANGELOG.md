@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- **Video embedding disabled** in HTML reports for improved performance
+  - Videos still recorded automatically to disk
+  - Available in execution directories for manual review
+  - Reports load faster and use less memory
+- **Simplified post-processing** - removed 322 lines of video injection code
+- **Updated documentation** to reflect new video handling approach
+
+### Technical Details
+- Modified `src/reports/post-process-report.js` (383 → 115 lines)
+- Videos location: `test-results/executions/<timestamp>/videos/`
+- Videos format: WebM (compatible with all modern browsers)
+- Manual access via file explorer or drag-drop to browser
+
 ## [1.0.0] - 2026-02-16
 
 ### 🎉 Initial Release
@@ -25,7 +41,7 @@ First stable release of the WebdriverIO + Cucumber + Page Object Model automatio
 - **Video recording** enabled for all test executions (always on)
   - Format: WebM
   - Location: `test-results/executions/<timestamp>/videos/`
-  - Embedded in HTML reports
+  - **Not embedded** in HTML reports (manual access only)
 - **Screenshot capture** for all scenarios (passed and failed)
   - Format: PNG
   - Location: `test-results/executions/<timestamp>/screenshots/`
@@ -41,11 +57,11 @@ First stable release of the WebdriverIO + Cucumber + Page Object Model automatio
 - **Detailed scenario reports** including:
   - Step-by-step execution details
   - Embedded screenshots
-  - Embedded video players
+  - Feature file paths and scenario names
   - Browser console logs on failures
   - Error messages and stack traces
   - Execution duration per step
-- **Video integration** directly in HTML reports (collapsible sections)
+- **Fast loading** - videos not embedded for better performance
 - **No-cache headers** for fresh content on reload
 
 #### 🗂️ Execution Management
