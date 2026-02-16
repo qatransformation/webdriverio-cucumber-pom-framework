@@ -44,6 +44,7 @@ The report is generated at: `test-results/index.html`
 - 📊 Charts and statistics
 - 📸 Failure screenshots
 - 🏷️ Project metadata
+- 🎥 Videos available in feature detail pages (not in execution index)
 
 **📸 Report Screenshots:**
 
@@ -62,7 +63,7 @@ Videos are saved in each execution directory:
 test-results/executions/2026-02-16_19-42-50/videos/
 ```
 
-**Note:** Videos are recorded but NOT embedded in HTML reports. Access them manually from the execution directories.
+**Note:** Videos are embedded in **feature detail pages** only (not in execution index.html). Click on a feature, then use the **"+View Video"** link to see the recording.
 
 ### Example of Generated Videos
 ```
@@ -127,8 +128,9 @@ report.generate({
 
 2. **Post-Processing** (`post-process-report.js`):
    - Scans for video files in the videos directory
-   - Injects video players into HTML report
-   - Creates collapsible sections for each video
+   - Injects video players into **feature HTML files only**
+   - Creates collapsible "+View Video" sections for each scenario
+   - **Does NOT** inject videos in execution index.html (faster loading)
 
 ### Screenshot Capture Flow
 

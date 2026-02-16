@@ -44,15 +44,16 @@ open test-results/executions/2026-02-16_19-42-50/videos/Add-and-manage-complete-
 
 ## 🔧 Cómo Funciona
 
-### Grabación Automática
+### Grabación e Inyección Automática
 
-El sistema graba videos automáticamente:
+El sistema graba e inyecta videos automáticamente:
 
 1. **wdio.conf.ts** configura wdio-video-reporter
 2. Los videos se graban durante la ejecución de tests
 3. Se guardan en `test-results/executions/[timestamp]/videos/`
-4. **post-process-report.js** NO inyecta videos (grabación solamente)
-5. Videos disponibles para revisión manual cuando sea necesario
+4. **post-process-report.js** inyecta videos SOLO en archivos de features
+5. Videos visibles mediante link "+View Video" en páginas de features
+6. **NO** se inyectan en el index.html de ejecución (carga más rápida)
 
 ### Configuración
 
@@ -89,8 +90,9 @@ Cuando ejecutas `npm test`:
 1. ✅ Tests se ejecutan
 2. ✅ Videos se graban automáticamente
 3. ✅ Reporte HTML se genera
-4. ✅ Videos quedan disponibles en carpetas de ejecución
-5. ✅ Acceso manual a videos cuando sea necesario
+4. ✅ Videos se inyectan en páginas de features
+5. ✅ Index de ejecución muestra resumen limpio (sin videos)
+6. ✅ Acceso a videos mediante "+View Video" en features
 
 ## 📂 Archivos del Sistema
 
@@ -135,16 +137,16 @@ Asegúrate de que:
 
 **Configuración Actual:**
 - ✅ Videos se graban automáticamente
-- ✅ Guardados en carpetas de ejecución
-- ✅ NO embebidos en reportes HTML
-- ✅ Reportes más rápidos y simples
-- ✅ Videos accesibles para revisión manual
+- ✅ Embebidos SOLO en páginas de features individuales
+- ✅ NO embebidos en index.html de ejecución
+- ✅ Acceso mediante link "+View Video"
+- ✅ Index de ejecución carga rápido (sin videos)
 
 **Ventajas:**
-- Reportes cargan más rápido
-- Menor uso de memoria del navegador
-- Videos disponibles cuando realmente se necesitan
-- Estructura de archivos más clara
+- Index de ejecución limpio y rápido
+- Videos disponibles donde realmente importan (detalle de features)
+- Mejor organización visual
+- Menor uso de memoria en página principal
 
 ---
 

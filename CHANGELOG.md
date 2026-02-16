@@ -8,18 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- **Video embedding disabled** in HTML reports for improved performance
-  - Videos still recorded automatically to disk
-  - Available in execution directories for manual review
-  - Reports load faster and use less memory
-- **Simplified post-processing** - removed 322 lines of video injection code
-- **Updated documentation** to reflect new video handling approach
+- **Video embedding optimized** - videos only in feature detail pages
+  - Videos embedded in individual feature HTML files
+  - NOT embedded in execution index.html (faster loading)
+  - Access via "+View Video" links in feature pages
+- **Improved report performance** - execution index loads instantly
+- **Better UX** - videos where they matter most (feature details)
+- **Updated documentation** to reflect optimized video placement
 
 ### Technical Details
-- Modified `src/reports/post-process-report.js` (383 → 115 lines)
+- Modified `src/reports/post-process-report.js` - removed index.html video injection
 - Videos location: `test-results/executions/<timestamp>/videos/`
-- Videos format: WebM (compatible with all modern browsers)
-- Manual access via file explorer or drag-drop to browser
+- Videos embedded in: `test-results/executions/<timestamp>/features/*.html`
+- Videos NOT in: `test-results/executions/<timestamp>/index.html`
+- Format: WebM with collapsible "+View Video" sections
 
 ## [1.0.0] - 2026-02-16
 

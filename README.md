@@ -112,8 +112,9 @@ webdriverio_cucumber_pom/
 All test executions are automatically recorded:
 - **Format:** WebM
 - **Location:** `test-results/executions/<timestamp>/videos/`
-- **Access:** Manual playback from execution directories
-- **Note:** Videos are NOT embedded in HTML reports for better performance
+- **Embedded in:** Feature detail pages (`.../features/*.html`)
+- **Access:** Click on feature → "+View Video" link
+- **Note:** Videos NOT in execution index for faster loading
 
 ## 📊 Reports
 
@@ -128,13 +129,13 @@ npm run serve:report  # Start HTTP server
 
 ### Report Features
 
-- 📹 Videos recorded (manual access from execution folders)
+- 📹 Videos in feature pages ("+View Video" links)
 - 📸 Screenshots on all tests
 - 📝 Detailed step-by-step execution
 - 🔍 Browser console logs on failures
 - ⏱️ Execution duration per scenario
 - 📊 Statistics dashboard
-- ⚡ Fast loading (no embedded videos)
+- ⚡ Fast loading execution index
 
 ## 🧹 Cleanup Utilities
 
