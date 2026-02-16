@@ -14,16 +14,16 @@ A complete UI test automation architecture has been created implementing:
 webdriverio_cucumber_pom/
 │
 ├── 📂 features/                         # Feature files (Gherkin/BDD)
-│   └── todomvc.feature                  # TodoMVC tests
+│   └── todomvc.feature                  # Test scenarios
 │
 ├── 📂 src/
 │   ├── 📂 pages/                        # Page Objects (POM)
 │   │   ├── BasePage.ts                  # Base class with common methods
-│   │   ├── TodoPage.ts                  # Page Object for TodoMVC
+│   │   ├── TodoPage.ts                  # Page Object
 │   │   └── index.ts                     # Exports
 │   │
 │   ├── 📂 steps/                        # Step Definitions
-│   │   ├── todo.steps.ts                # TodoMVC steps
+│   │   ├── todo.steps.ts                # Test steps
 │   │   └── common.steps.ts              # Reusable steps
 │   │
 │   ├── 📂 support/                      # Configuration and support
@@ -63,7 +63,7 @@ webdriverio_cucumber_pom/
 │   ├── 📂 guides/                       # User guides
 │   │   ├── USAGE_GUIDE.md               # Complete usage guide
 │   │   ├── QUICK_REFERENCE.md           # Quick reference
-│   │   ├── TODOMVC_QUICK_REF.md         # TodoMVC specific guide
+│   │   ├── QUICK_REFERENCE.md           # Quick reference guide
 │   │   └── ENVIRONMENT_SETUP_SUMMARY.md # Environment setup
 │   │
 │   ├── 📂 reports/                      # Report documentation
@@ -112,7 +112,7 @@ npm run test:report
 ### ✅ Page Object Model
 - **BasePage**: Base class with common functionalities
 - **Specific Page Objects**: HomePage, LoginPage, etc.
-- **Centralized selectors**: TodoPage for TodoMVC application
+- **Centralized selectors**: Page Objects for application
 - **High-level methods**: Represent user actions
 
 ### ✅ BDD with Cucumber

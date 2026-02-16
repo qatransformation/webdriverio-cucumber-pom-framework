@@ -23,7 +23,6 @@ Step-by-step guides for using the framework.
 
 - **[USAGE_GUIDE.md](guides/USAGE_GUIDE.md)** - Complete usage guide
 - **[QUICK_REFERENCE.md](guides/QUICK_REFERENCE.md)** - Quick reference for commands
-- **[TODOMVC_QUICK_REF.md](guides/TODOMVC_QUICK_REF.md)** - TodoMVC specific testing guide
 - **[ENVIRONMENT_SETUP_SUMMARY.md](guides/ENVIRONMENT_SETUP_SUMMARY.md)** - Environment setup instructions
 
 ### 📊 Reports & Evidence
@@ -108,4 +107,3 @@ webdriverio_cucumber_pom/
 - [WebdriverIO Documentation](https://webdriver.io/)
 - [Cucumber Documentation](https://cucumber.io/docs/cucumber/)
 - [Page Object Model Pattern](https://webdriver.io/docs/pageobjects/)
-- [TodoMVC](https://todomvc.com/)

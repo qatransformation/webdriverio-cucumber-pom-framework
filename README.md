@@ -211,7 +211,6 @@ This project is licensed under the ISC License - see the [LICENSE](LICENSE) file
 - [WebdriverIO Documentation](https://webdriver.io/)
 - [Cucumber Documentation](https://cucumber.io/docs/cucumber/)
 - [Page Object Model Pattern](https://webdriver.io/docs/pageobjects/)
-- [TodoMVC](https://todomvc.com/)
 
 ## 📋 Changelog
 
