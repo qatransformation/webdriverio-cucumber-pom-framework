@@ -45,7 +45,7 @@ function cleanTimestampFile() {
 // Get execution directory path
 function getExecutionDir() {
   const timestamp = getExecutionTimestamp();
-  return path.join(__dirname, 'test-results', 'executions', timestamp);
+  return path.join(__dirname, '../../test-results', 'executions', timestamp);
 }
 
 // Ensure execution directory exists

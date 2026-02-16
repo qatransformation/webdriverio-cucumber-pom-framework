@@ -5,8 +5,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const executionsDir = path.join(__dirname, 'test-results', 'executions');
-const mainIndexPath = path.join(__dirname, 'test-results', 'index.html');
+const executionsDir = path.join(__dirname, '../../test-results', 'executions');
+const mainIndexPath = path.join(__dirname, '../../test-results', 'index.html');
 
 console.log('📊 Generating main index with execution history...');
 

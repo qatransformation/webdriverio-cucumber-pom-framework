@@ -270,7 +270,7 @@ async function cleanOldExecutions() {
     
     // Regenerate index
     console.log(colorize('🔄 Regenerating index...', 'blue'));
-    require('../generate-index.js');
+    require('../src/reports/generate-index.js');
     console.log(colorize('✅ Index regenerated', 'green'));
   } else {
     console.log(colorize('❌ Operation cancelled', 'yellow'));

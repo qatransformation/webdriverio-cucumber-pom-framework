@@ -8,7 +8,7 @@ const path = require('path');
 const url = require('url');
 
 const PORT = 8080;
-const TEST_RESULTS_DIR = path.join(__dirname, 'test-results');
+const TEST_RESULTS_DIR = path.join(__dirname, '../../test-results');
 
 // MIME types
 const mimeTypes = {

@@ -1,6 +1,6 @@
 import type { Options } from '@wdio/types';
 import video from 'wdio-video-reporter';
-const { ensureExecutionDir, getExecutionDir } = require('./execution-timestamp');
+const { ensureExecutionDir, getExecutionDir } = require('./src/reports/execution-timestamp');
 
 // Ensure execution directory exists before tests start
 const executionDir = ensureExecutionDir();

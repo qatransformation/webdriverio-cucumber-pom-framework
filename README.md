@@ -81,17 +81,23 @@ Complete documentation is available in the [`docs/`](docs/) folder:
 ```
 webdriverio_cucumber_pom/
 ├── features/              # 🥒 Cucumber feature files
-│   └── todomvc.feature    # TodoMVC test scenarios
+│   └── todomvc.feature    # Test scenarios
 ├── src/
 │   ├── pages/             # 📄 Page Objects
 │   │   ├── BasePage.ts    # Base page class
-│   │   └── TodoPage.ts    # TodoMVC page
+│   │   └── TodoPage.ts    # Application page
 │   ├── steps/             # 🔧 Step definitions
-│   │   └── todo.steps.ts  # TodoMVC steps
+│   │   └── todo.steps.ts  # Test steps
 │   ├── support/           # 🛠️ Test support
 │   │   ├── hooks.ts       # Before/After hooks
 │   │   └── world.ts       # Custom World
-│   └── utils/             # 🔨 Utilities
+│   ├── utils/             # 🔨 Utilities
+│   └── reports/           # 📊 Report generation
+│       ├── generate-report.js      # Report generator
+│       ├── generate-index.js       # Index generator
+│       ├── report-server.js        # HTTP server
+│       ├── post-process-report.js  # Post-processor
+│       └── execution-timestamp.js  # Timestamp utils
 ├── test-results/          # 📊 Test results
 │   ├── index.html         # Main execution history
 │   └── executions/        # Individual execution folders

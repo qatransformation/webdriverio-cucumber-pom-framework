@@ -78,9 +78,13 @@ webdriverio_cucumber_pom/
 ├── 📄 wdio.conf.ts                      # WebdriverIO configuration
 ├── 📄 tsconfig.json                     # TypeScript configuration
 ├── 📄 package.json                      # Dependencies and scripts
-├── 📄 generate-report.js                # Report generator
-├── 📄 generate-index.js                 # Index generator
-├── 📄 report-server.js                  # Report HTTP server
+├── � src/
+│   ├── 📂 reports/                      # Report generation scripts
+│   │   ├── generate-report.js           # Report generator
+│   │   ├── generate-index.js            # Index generator
+│   │   ├── report-server.js             # Report HTTP server
+│   │   ├── post-process-report.js       # Post-process reports
+│   │   └── execution-timestamp.js       # Timestamp utilities
 ├── 📄 Jenkinsfile                       # Jenkins pipeline configuration
 ├── 📄 .gitignore                        # Files ignored by Git
 ├── 📄 LICENSE                           # ISC License
